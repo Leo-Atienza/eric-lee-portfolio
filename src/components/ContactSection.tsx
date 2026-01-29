@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mail, Linkedin, MapPin, Send } from "lucide-react";
+import { Mail, Linkedin, MapPin, Send, Phone } from "lucide-react";
 
 const ContactSection = () => {
   return (
@@ -40,6 +40,20 @@ const ContactSection = () => {
               <div className="flex-1">
                 <p className="text-sm text-muted-foreground">Email</p>
                 <p className="font-medium">Leerodrick9@gmail.com</p>
+              </div>
+              <Send className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+            </a>
+
+            <a
+              href="tel:6472178158"
+              className="flex items-center gap-4 p-4 rounded-xl bg-secondary/50 hover:bg-primary/10 transition-all group"
+            >
+              <div className="p-3 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+                <Phone className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Phone</p>
+                <p className="font-medium">(647) 217-8158</p>
               </div>
               <Send className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </a>
