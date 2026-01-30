@@ -78,15 +78,36 @@ const ProjectsSection = () => {
           <h3 className="section-title">Featured Work</h3>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
+        <motion.div 
+          className="grid md:grid-cols-2 gap-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.12,
+              },
+            },
+          }}
+        >
+          {projects.map((project) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: index * 0.15, ease: [0.4, 0, 0.2, 1] }}
-              className="glass-card rounded-3xl overflow-hidden group hover:border-primary/30 transition-all duration-500"
+              variants={{
+                hidden: { opacity: 0, y: 30, scale: 0.98 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0, 
+                  scale: 1,
+                  transition: {
+                    duration: 0.5,
+                    ease: [0.4, 0, 0.2, 1],
+                  }
+                },
+              }}
+              className="glass-card rounded-3xl overflow-hidden group hover:border-primary/30"
             >
               {/* Header with gradient */}
               <div className={`p-8 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
@@ -114,17 +135,13 @@ const ProjectsSection = () => {
                 {/* Metrics */}
                 <div className="grid grid-cols-3 gap-4 mb-8">
                   {project.highlights.map((highlight, i) => (
-                    <motion.div 
+                    <div 
                       key={i} 
                       className="text-center"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 + i * 0.1 }}
                     >
                       <p className="text-2xl font-bold gradient-text">{highlight.metric}</p>
                       <p className="text-xs text-muted-foreground mt-1">{highlight.label}</p>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
 
@@ -143,7 +160,7 @@ const ProjectsSection = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -143,12 +143,21 @@
 @layer components {
   .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-card);
     position: relative;
     overflow: hidden;
+    transform: translateZ(0);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                border-color 0.4s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px) translateZ(0);
+    box-shadow: var(--shadow-elevated), var(--glow-soft);
   }
 
   .glass-card::before {
@@ -157,6 +166,12 @@
     inset: 0;
     background: var(--glass-shine);
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .glass-card:hover::before {
+    opacity: 1;
   }
 
   .gradient-text {
@@ -320,6 +335,24 @@
 
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* GPU acceleration helpers */
+  .transform-gpu {
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Smooth transition presets */
+  .transition-smooth {
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-duration: 0.4s;
+  }
+
+  .transition-premium {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
