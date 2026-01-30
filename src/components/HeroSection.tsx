@@ -55,7 +55,7 @@ const HeroSection = () => {
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-slow" />
           </motion.div>
 
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 tracking-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold mb-6 md:mb-8 tracking-tight">
             <span className="block">Eric</span>
             <span className="gradient-text">Lee</span>
           </h1>
@@ -65,16 +65,31 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-2xl mx-auto mb-4 font-light tracking-tight">
+            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-2xl mx-auto mb-4 font-light tracking-tight">
               Business Technology Management
             </p>
 
-            <div className="flex items-center justify-center gap-3 text-base md:text-lg text-muted-foreground/70 mb-12">
+            {/* Mobile: Stack vertically, Desktop: Horizontal with sparkles */}
+            <div className="hidden sm:flex items-center justify-center gap-3 text-base md:text-lg text-muted-foreground/70 mb-12">
               <span>Data Analytics</span>
               <Sparkles className="w-4 h-4 text-primary" />
               <span>Business Intelligence</span>
               <Sparkles className="w-4 h-4 text-primary" />
               <span>Process Optimization</span>
+            </div>
+            <div className="flex sm:hidden flex-col items-center gap-2 text-sm text-muted-foreground/70 mb-10">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span>Data Analytics</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span>Business Intelligence</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span>Process Optimization</span>
+              </div>
             </div>
           </motion.div>
         </motion.div>

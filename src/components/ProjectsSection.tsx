@@ -110,49 +110,49 @@ const ProjectsSection = () => {
               className="glass-card rounded-3xl overflow-hidden group hover:border-primary/30"
             >
               {/* Header with gradient */}
-              <div className={`p-8 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
+              <div className={`p-6 sm:p-8 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-black/30" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 
                 <div className="relative z-10 flex items-start justify-between">
                   <div>
-                    <h4 className="text-2xl font-bold text-white mb-1">{project.title}</h4>
-                    <p className="text-white/80 font-medium">{project.subtitle}</p>
+                    <h4 className="text-xl sm:text-2xl font-bold text-white mb-1">{project.title}</h4>
+                    <p className="text-white/80 font-medium text-sm sm:text-base">{project.subtitle}</p>
                   </div>
                   <motion.div
-                    className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm text-white"
+                    className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm text-white"
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
-                    <project.icon className="w-7 h-7" />
+                    <project.icon className="w-5 h-5 sm:w-7 sm:h-7" />
                   </motion.div>
                 </div>
-                <p className="relative z-10 text-white/70 text-sm mt-4 font-medium">{project.period}</p>
+                <p className="relative z-10 text-white/70 text-xs sm:text-sm mt-3 sm:mt-4 font-medium">{project.period}</p>
               </div>
 
               {/* Content */}
-              <div className="p-8">
-                {/* Metrics */}
-                <div className="grid grid-cols-3 gap-4 mb-8">
+              <div className="p-6 sm:p-8">
+                {/* Metrics - responsive grid */}
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
                   {project.highlights.map((highlight, i) => (
                     <div 
                       key={i} 
                       className="text-center"
                     >
-                      <p className="text-2xl font-bold gradient-text">{highlight.metric}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{highlight.label}</p>
+                      <p className="text-lg sm:text-2xl font-bold gradient-text">{highlight.metric}</p>
+                      <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 leading-tight">{highlight.label}</p>
                     </div>
                   ))}
                 </div>
 
-                <p className="text-muted-foreground leading-relaxed mb-6">
+                <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
                   {project.description}
                 </p>
 
                 {/* Tools */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {project.tools.map((tool) => (
-                    <span key={tool} className="skill-badge text-sm">
+                    <span key={tool} className="skill-badge text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2">
                       {tool}
                     </span>
                   ))}

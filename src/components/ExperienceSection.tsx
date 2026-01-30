@@ -65,7 +65,7 @@ const ExperienceSection = () => {
           {/* Timeline line */}
           <div className="absolute left-0 md:left-8 top-0 bottom-0 w-px timeline-line hidden md:block" />
 
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {experiences.map((exp, index) => (
               <motion.div
                 key={`${exp.title}-${exp.company}`}
@@ -84,37 +84,36 @@ const ExperienceSection = () => {
                   transition={{ duration: 0.4, delay: index * 0.15 + 0.2 }}
                 />
 
-                <div className="glass-card rounded-3xl p-8 md:p-10 hover:border-primary/30 transition-all duration-500 group">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 gap-4">
+                <div className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 hover:border-primary/30 transition-all duration-500 group">
+                  <div className="flex flex-col gap-3 mb-5 sm:mb-6">
                     <div>
-                      <div className="flex items-center gap-3 flex-wrap mb-2">
-                        <h4 className="text-xl md:text-2xl font-bold">{exp.title}</h4>
+                      <div className="flex items-start sm:items-center gap-2 sm:gap-3 flex-wrap mb-2">
+                        <h4 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight">{exp.title}</h4>
                         {exp.type && (
-                          <span className="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 text-primary font-semibold">
+                          <span className="text-[10px] sm:text-xs px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 text-primary font-semibold">
                             {exp.type}
                           </span>
                         )}
                       </div>
-                      <p className="text-primary font-semibold text-lg">{exp.company}</p>
+                      <p className="text-primary font-semibold text-base sm:text-lg">{exp.company}</p>
                     </div>
-                    <div className="text-sm text-muted-foreground text-right">
-                      <p className="font-medium">{exp.period}</p>
-                      <p>{exp.location}</p>
+                    <div className="text-xs sm:text-sm text-muted-foreground">
+                      <p className="font-medium">{exp.period} • {exp.location}</p>
                     </div>
                   </div>
 
-                  <ul className="space-y-4">
+                  <ul className="space-y-3 sm:space-y-4">
                     {exp.achievements.map((achievement, i) => (
                       <motion.li 
                         key={i} 
-                        className="flex items-start gap-4 text-muted-foreground group/item"
+                        className="flex items-start gap-3 sm:gap-4 text-muted-foreground group/item"
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 + i * 0.1 }}
                       >
-                        <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                        <span className="leading-relaxed">{achievement}</span>
+                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
+                        <span className="leading-relaxed text-sm sm:text-base">{achievement}</span>
                       </motion.li>
                     ))}
                   </ul>
