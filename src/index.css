@@ -72,12 +72,49 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
     letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Performance optimizations for smoother animations */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Enable GPU acceleration for transforms and animations */
+  .glass-card,
+  .skill-badge,
+  .btn-premium,
+  .btn-glass,
+  .contact-card {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
   ::selection {
@@ -87,7 +124,7 @@
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
   }
 
   ::-webkit-scrollbar-track {
@@ -96,11 +133,13 @@
 
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--muted));
-    border-radius: 4px;
+    border-radius: 5px;
+    border: 2px solid hsl(var(--background));
+    transition: background 0.2s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary) / 0.5);
+    background: hsl(var(--primary) / 0.6);
   }
 }
 
@@ -148,7 +187,7 @@
     @apply px-4 py-2 rounded-full text-sm font-medium;
     background: hsl(var(--secondary));
     border: 1px solid var(--glass-border);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
   }
@@ -179,7 +218,7 @@
     background: var(--gradient-primary);
     background-size: 200% 200%;
     color: hsl(var(--primary-foreground));
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: var(--glow-soft), 0 4px 20px -4px hsl(var(--primary) / 0.5);
   }
 
@@ -199,7 +238,7 @@
     backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
     color: hsl(var(--foreground));
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .btn-glass:hover {
@@ -235,9 +274,10 @@
 
   /* Contact card hover */
   .contact-card {
-    @apply flex items-center gap-4 p-5 rounded-2xl transition-all duration-500;
+    @apply flex items-center gap-4 p-5 rounded-2xl;
     background: hsl(var(--secondary) / 0.5);
     border: 1px solid transparent;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .contact-card:hover {
@@ -262,11 +302,11 @@
 
 @layer utilities {
   .animate-fade-up {
-    animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 
   .animate-fade-in {
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   .animate-glow {
@@ -274,11 +314,11 @@
   }
 
   .animate-float {
-    animation: float 8s ease-in-out infinite;
+    animation: float 6s ease-in-out infinite;
   }
 
   .animate-pulse-slow {
-    animation: pulseSlow 4s ease-in-out infinite;
+    animation: pulseSlow 3s ease-in-out infinite;
   }
 
   .text-balance {
@@ -289,7 +329,7 @@
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
