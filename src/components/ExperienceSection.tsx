@@ -15,7 +15,7 @@ const experiences = [
     ],
   },
   {
-    title: "HELIX Entrepreneur",
+    title: "HELIX Entrepreneur | SearGuard",
     company: "Seneca Polytechnic",
     location: "Toronto, ON",
     period: "May 2025 – August 2025",
