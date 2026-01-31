@@ -4,10 +4,10 @@ import { Mail, Linkedin, MapPin, ArrowRight, Phone } from "lucide-react";
 const ContactSection = () => {
   const contactLinks = [
     {
-      href: "mailto:Leerodrick9@gmail.com",
+      href: "mailto:ericyeefalee@gmail.com",
       icon: Mail,
       label: "Email",
-      value: "Leerodrick9@gmail.com",
+      value: "ericyeefalee@gmail.com",
       isLink: true,
     },
     {
