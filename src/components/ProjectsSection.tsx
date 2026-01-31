@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { TrendingUp, Database, BarChart3, LineChart, ArrowUpRight } from "lucide-react";
+import { TrendingUp, Database, BarChart3, LineChart, BarChart2 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const projects = [
   {
@@ -8,6 +9,7 @@ const projects = [
     period: "Nov 2023 – Jan 2024",
     icon: BarChart3,
     gradient: "from-emerald-500 via-teal-500 to-cyan-500",
+    dashboardUrl: "/assets/yees-dashboard.pdf",
     highlights: [
       { metric: "10,000+", label: "Utility records validated" },
       { metric: "$15.4M", label: "Potential savings identified" },
@@ -22,6 +24,7 @@ const projects = [
     period: "Jan 2026 – Feb 2026",
     icon: Database,
     gradient: "from-blue-500 via-indigo-500 to-violet-500",
+    dashboardUrl: "/assets/loan-dashboard.pdf",
     highlights: [
       { metric: "50%", label: "Prep time reduced" },
       { metric: "2x", label: "Higher default rate identified" },
@@ -36,6 +39,7 @@ const projects = [
     period: "Jan 2026 – Feb 2026",
     icon: LineChart,
     gradient: "from-purple-500 via-pink-500 to-rose-500",
+    dashboardUrl: "/assets/hospital-dashboard.pdf",
     highlights: [
       { metric: "300,000+", label: "Hospital encounters analyzed" },
       { metric: "Top 3", label: "Segments prioritized" },
@@ -50,6 +54,7 @@ const projects = [
     period: "Nov 2025 – Dec 2025",
     icon: TrendingUp,
     gradient: "from-orange-500 via-amber-500 to-yellow-500",
+    dashboardUrl: "/assets/tesla-dashboard.pdf",
     highlights: [
       { metric: "10 Years", label: "Data standardized" },
       { metric: "30%", label: "Reporting time reduced" },
@@ -62,9 +67,10 @@ const projects = [
 
 const ProjectsSection = () => {
   return (
-    <section id="projects" className="relative py-32 bg-gradient-to-b from-transparent via-secondary/30 to-transparent">
-      {/* Background effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(260_80%_60%/0.05),transparent_60%)]" />
+    <TooltipProvider delayDuration={200}>
+      <section id="projects" className="relative py-32 bg-gradient-to-b from-transparent via-secondary/30 to-transparent">
+        {/* Background effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(260_80%_60%/0.05),transparent_60%)]" />
 
       <div className="section-container relative z-10">
         <motion.div
@@ -115,17 +121,38 @@ const ProjectsSection = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 
                 <div className="relative z-10 flex items-start justify-between">
-                  <div>
+                  <div className="flex-1 pr-4">
                     <h4 className="text-xl sm:text-2xl font-bold text-white mb-1">{project.title}</h4>
                     <p className="text-white/80 font-medium text-sm sm:text-base">{project.subtitle}</p>
                   </div>
-                  <motion.div
-                    className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm text-white"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 400 }}
-                  >
-                    <project.icon className="w-5 h-5 sm:w-7 sm:h-7" />
-                  </motion.div>
+                  <div className="flex items-start gap-2">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.a
+                          href={project.dashboardUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-lg bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          transition={{ type: "spring", stiffness: 400 }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <BarChart2 className="w-4 h-4" />
+                        </motion.a>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="text-xs">
+                        View Dashboard
+                      </TooltipContent>
+                    </Tooltip>
+                    <motion.div
+                      className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm text-white"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      <project.icon className="w-5 h-5 sm:w-7 sm:h-7" />
+                    </motion.div>
+                  </div>
                 </div>
                 <p className="relative z-10 text-white/70 text-xs sm:text-sm mt-3 sm:mt-4 font-medium">{project.period}</p>
               </div>
@@ -162,7 +189,8 @@ const ProjectsSection = () => {
           ))}
         </motion.div>
       </div>
-    </section>
+      </section>
+    </TooltipProvider>
   );
 };
 
