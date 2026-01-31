@@ -40,9 +40,10 @@ const projects: ProjectData[] = [
     period: "Jan 2026 – Feb 2026",
     gradient: "from-blue-500 via-indigo-500 to-violet-500",
     gallery: [
-      { src: "/assets/dashboards/credit_full.png", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/credit_scatter_income_debt.png", caption: "Income vs Debt Burden by Default" },
-      { src: "/assets/dashboards/credit_dti_distribution.png", caption: "Debt-to-Income Distribution by Default" },
+      // Cache-bust to avoid stale 404s from earlier builds / hard caching.
+      { src: "/assets/dashboards/credit_full.png?v=1", caption: "Full Dashboard" },
+      { src: "/assets/dashboards/credit_scatter_income_debt.png?v=1", caption: "Income vs Debt Burden by Default" },
+      { src: "/assets/dashboards/credit_dti_distribution.png?v=1", caption: "Debt-to-Income Distribution by Default" },
     ],
     highlights: [
       { metric: "50%", label: "Prep time reduced" },
