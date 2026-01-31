@@ -9,7 +9,6 @@ interface ProjectData {
   subtitle: string;
   period: string;
   gradient: string;
-  heroImage: string;
   gallery: GalleryImage[];
   highlights: { metric: string; label: string }[];
   description: string;
@@ -22,7 +21,6 @@ const projects: ProjectData[] = [
     subtitle: "Cost-Benefit Analysis",
     period: "Nov 2023 – Jan 2024",
     gradient: "from-emerald-500 via-teal-500 to-cyan-500",
-    heroImage: "/assets/dashboards/yees_full.png",
     gallery: [
       { src: "/assets/dashboards/yees_full.png", caption: "Full Dashboard" },
       { src: "/assets/dashboards/yees_intensity_bar.png", caption: "Electricity Intensity by Property Type" },
@@ -41,7 +39,6 @@ const projects: ProjectData[] = [
     subtitle: "Loan Default Prediction",
     period: "Jan 2026 – Feb 2026",
     gradient: "from-blue-500 via-indigo-500 to-violet-500",
-    heroImage: "/assets/dashboards/credit_full.png",
     gallery: [
       { src: "/assets/dashboards/credit_full.png", caption: "Full Dashboard" },
       { src: "/assets/dashboards/credit_scatter_income_debt.png", caption: "Income vs Debt Burden by Default" },
@@ -60,7 +57,6 @@ const projects: ProjectData[] = [
     subtitle: "Healthcare Analytics",
     period: "Jan 2026 – Feb 2026",
     gradient: "from-purple-500 via-pink-500 to-rose-500",
-    heroImage: "/assets/dashboards/hospital_full.png",
     gallery: [
       { src: "/assets/dashboards/hospital_full.png", caption: "Full Dashboard" },
       { src: "/assets/dashboards/hospital_admission_type.png", caption: "Admission Type vs Length of Stay" },
@@ -79,7 +75,6 @@ const projects: ProjectData[] = [
     subtitle: "10-Year Trends",
     period: "Nov 2025 – Dec 2025",
     gradient: "from-orange-500 via-amber-500 to-yellow-500",
-    heroImage: "/assets/dashboards/tesla_full.png",
     gallery: [
       { src: "/assets/dashboards/tesla_full.png", caption: "Full Dashboard" },
       { src: "/assets/dashboards/tesla_deliveries_trend.png", caption: "Total Deliveries per Year" },
@@ -190,37 +185,6 @@ const ProjectsSection = () => {
                   <p className="relative z-10 text-white/70 text-xs sm:text-sm mt-3 sm:mt-4 font-medium">{project.period}</p>
                 </div>
 
-                {/* Hero Dashboard Screenshot */}
-                <motion.div 
-                  className="relative cursor-pointer overflow-hidden"
-                  onClick={() => openGallery(project)}
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="aspect-[16/9] bg-secondary/20 relative overflow-hidden">
-                    <img
-                      src={project.heroImage}
-                      alt={`${project.title} Dashboard`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileHover={{ opacity: 1, scale: 1 }}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                      >
-                        <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
-                          <BarChart2 className="w-8 h-8 text-white" />
-                        </div>
-                      </motion.div>
-                    </div>
-                  </div>
-                  <p className="text-xs text-muted-foreground text-center py-2 bg-secondary/30">
-                    Click to view full dashboard gallery
-                  </p>
-                </motion.div>
 
                 {/* Content */}
                 <div className="p-6 sm:p-8">
