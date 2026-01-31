@@ -75,7 +75,7 @@ const AboutSection = () => {
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="mb-16"
         >
-          <h2 className="section-label mb-4">About</h2>
+          <h2 className="section-label mb-4">Summary</h2>
           <h3 className="section-title">Education & Background</h3>
         </motion.div>
 
