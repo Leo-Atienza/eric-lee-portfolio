@@ -40,7 +40,6 @@ const projects: ProjectData[] = [
     period: "Jan 2026 – Feb 2026",
     gradient: "from-blue-500 via-indigo-500 to-violet-500",
     gallery: [
-      // Cache-bust to avoid stale 404s from earlier builds / hard caching.
       { src: "/assets/dashboards/credit_full.png?v=1", caption: "Full Dashboard" },
       { src: "/assets/dashboards/credit_scatter_income_debt.png?v=1", caption: "Income vs Debt Burden by Default" },
       { src: "/assets/dashboards/credit_dti_distribution.png?v=1", caption: "Debt-to-Income Distribution by Default" },
@@ -91,6 +90,43 @@ const projects: ProjectData[] = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+    },
+  },
+};
+
+const metricVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.5,
+      ease: [0.34, 1.56, 0.64, 1] as const,
+    },
+  }),
+};
+
 const ProjectsSection = () => {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [activeProject, setActiveProject] = useState<ProjectData | null>(null);
@@ -111,14 +147,23 @@ const ProjectsSection = () => {
     <TooltipProvider delayDuration={200}>
       <section id="projects" className="relative py-32 bg-gradient-to-b from-transparent via-secondary/30 to-transparent">
         {/* Background effect */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(260_80%_60%/0.05),transparent_60%)]" />
+        <motion.div 
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          style={{
+            background: 'radial-gradient(ellipse at top, hsl(260 80% 60% / 0.05), transparent 60%)'
+          }}
+        />
 
         <div className="section-container relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center mb-16"
           >
             <h2 className="section-label mb-4">Projects</h2>
@@ -127,39 +172,30 @@ const ProjectsSection = () => {
 
           <motion.div 
             className="grid md:grid-cols-2 gap-8"
+            variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.12,
-                },
-              },
-            }}
           >
             {projects.map((project) => (
               <motion.div
                 key={project.title}
-                variants={{
-                  hidden: { opacity: 0, y: 30, scale: 0.98 },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0, 
-                    scale: 1,
-                    transition: {
-                      duration: 0.5,
-                      ease: [0.4, 0, 0.2, 1],
-                    }
-                  },
+                variants={cardVariants}
+                className="glass-card rounded-3xl overflow-hidden group"
+                whileHover={{ 
+                  y: -8, 
+                  transition: { type: "spring", stiffness: 300, damping: 20 } 
                 }}
-                className="glass-card rounded-3xl overflow-hidden group hover:border-primary/30"
               >
                 {/* Header with gradient */}
                 <div className={`p-6 sm:p-8 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
                   <div className="absolute inset-0 bg-black/30" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                  />
                   
                   <div className="relative z-10 flex items-start justify-between">
                     <div className="flex-1 pr-4">
@@ -171,9 +207,9 @@ const ProjectsSection = () => {
                         <motion.button
                           onClick={() => openGallery(project)}
                           className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={{ type: "spring", stiffness: 400 }}
+                          whileHover={{ scale: 1.15, rotate: 8 }}
+                          whileTap={{ scale: 0.9 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 15 }}
                         >
                           <BarChart2 className="w-5 h-5 sm:w-7 sm:h-7" />
                         </motion.button>
@@ -186,21 +222,27 @@ const ProjectsSection = () => {
                   <p className="relative z-10 text-white/70 text-xs sm:text-sm mt-3 sm:mt-4 font-medium">{project.period}</p>
                 </div>
 
-
                 {/* Content */}
                 <div className="p-6 sm:p-8">
-                  {/* Metrics - responsive grid */}
-                  <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
+                  {/* Metrics */}
+                  <motion.div 
+                    className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                  >
                     {project.highlights.map((highlight, i) => (
-                      <div 
+                      <motion.div 
                         key={i} 
                         className="text-center"
+                        custom={i}
+                        variants={metricVariants}
                       >
                         <p className="text-lg sm:text-2xl font-bold gradient-text">{highlight.metric}</p>
                         <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 leading-tight">{highlight.label}</p>
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
 
                   <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
                     {project.description}
@@ -208,10 +250,22 @@ const ProjectsSection = () => {
 
                   {/* Tools */}
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                    {project.tools.map((tool) => (
-                      <span key={tool} className="skill-badge text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2">
+                    {project.tools.map((tool, index) => (
+                      <motion.span 
+                        key={tool} 
+                        className="skill-badge text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.05, type: "spring", stiffness: 300 }}
+                        whileHover={{ 
+                          scale: 1.1, 
+                          y: -3,
+                          transition: { type: "spring", stiffness: 400 }
+                        }}
+                      >
                         {tool}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
                 </div>
