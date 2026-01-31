@@ -125,34 +125,25 @@ const ProjectsSection = () => {
                     <h4 className="text-xl sm:text-2xl font-bold text-white mb-1">{project.title}</h4>
                     <p className="text-white/80 font-medium text-sm sm:text-base">{project.subtitle}</p>
                   </div>
-                  <div className="flex items-start gap-2">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <motion.a
-                          href={project.dashboardUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 rounded-lg bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={{ type: "spring", stiffness: 400 }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <BarChart2 className="w-4 h-4" />
-                        </motion.a>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" className="text-xs">
-                        View Dashboard
-                      </TooltipContent>
-                    </Tooltip>
-                    <motion.div
-                      className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm text-white"
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ type: "spring", stiffness: 400 }}
-                    >
-                      <project.icon className="w-5 h-5 sm:w-7 sm:h-7" />
-                    </motion.div>
-                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <motion.a
+                        href={project.dashboardUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <BarChart2 className="w-5 h-5 sm:w-7 sm:h-7" />
+                      </motion.a>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="text-xs">
+                      View Dashboard
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
                 <p className="relative z-10 text-white/70 text-xs sm:text-sm mt-3 sm:mt-4 font-medium">{project.period}</p>
               </div>
