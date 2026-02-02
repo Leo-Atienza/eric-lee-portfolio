@@ -54,7 +54,7 @@
     --shadow-elevated: 0 8px 48px hsl(222 47% 2% / 0.7), 0 0 1px hsl(217 91% 60% / 0.15);
     --shadow-premium: 0 25px 50px -12px hsl(222 47% 2% / 0.8);
     
-    --glass-bg: hsl(222 47% 8% / 0.7);
+    --glass-bg: hsl(222 47% 8% / 0.92);
     --glass-border: hsl(222 30% 20% / 0.6);
     --glass-shine: linear-gradient(135deg, hsl(217 91% 60% / 0.1) 0%, transparent 50%);
   }
@@ -147,15 +147,10 @@
 @layer components {
   .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-card);
     position: relative;
     overflow: hidden;
-    transform: translate3d(0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
     contain: layout style paint;
     transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -163,23 +158,17 @@
 
   .glass-card:hover {
     box-shadow: var(--shadow-elevated), var(--glow-soft);
-  }
-
-  .glass-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--glass-shine);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .glass-card:hover::before {
-    opacity: 1;
+    border-color: hsl(222 30% 24% / 0.7);
   }
 
   .gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-animated {
     background: var(--gradient-text);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -208,29 +197,12 @@
     transition: background 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .skill-badge::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, hsl(var(--primary) / 0) 0%, hsl(var(--primary) / 0.15) 100%);
-    opacity: 0;
-    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    pointer-events: none;
-    contain: strict;
   }
 
   .skill-badge:hover {
     background: hsl(var(--primary) / 0.15);
     border-color: hsl(var(--primary) / 0.5);
     box-shadow: 0 8px 24px -8px hsl(var(--primary) / 0.25);
-  }
-
-  .skill-badge:hover::before {
-    opacity: 1;
   }
 
   /* Premium button styles */
@@ -252,7 +224,6 @@
   .btn-glass {
     @apply relative inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 rounded-full font-semibold text-sm sm:text-base;
     background: var(--glass-bg);
-    backdrop-filter: blur(6px);
     border: 1px solid var(--glass-border);
     color: hsl(var(--foreground));
     contain: layout style paint;

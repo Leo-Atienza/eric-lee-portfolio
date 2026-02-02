@@ -49,7 +49,7 @@ const Navigation = () => {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out ${
           isScrolled
-            ? "bg-background/80 backdrop-blur-md border-b border-border/30 shadow-lg"
+            ? "bg-background/95 border-b border-border/30 shadow-lg"
             : "bg-transparent"
         }`}
       >
@@ -112,7 +112,7 @@ const Navigation = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
+              className="fixed inset-0 bg-background/90 z-40 md:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <motion.div

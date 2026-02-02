@@ -118,7 +118,7 @@ const HeroSection = () => {
               Eric
             </motion.span>
             <motion.span
-              className="gradient-text"
+              className="gradient-text-animated"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.9, delay: 0.5, ease: silk }}

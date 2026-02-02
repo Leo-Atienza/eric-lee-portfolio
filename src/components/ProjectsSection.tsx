@@ -186,8 +186,7 @@ const ProjectsSection = () => {
               >
                 {/* Header with gradient */}
                 <div className={`p-4 sm:p-6 md:p-8 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-black/30" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
 
                   <div className="relative z-10 flex items-start justify-between">
                     <div className="flex-1 pr-4">
@@ -198,7 +197,7 @@ const ProjectsSection = () => {
                       <TooltipTrigger asChild>
                         <motion.button
                           onClick={() => openGallery(project)}
-                          className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors"
+                          className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/15 text-white hover:bg-white/25 transition-colors"
                           whileHover={{ scale: 1.08 }}
                           whileTap={{ scale: 0.95 }}
                           transition={{ type: "spring", stiffness: 400, damping: 25 }}
