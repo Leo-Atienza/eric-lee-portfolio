@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { BarChart2 } from "lucide-react";
+import { BarChart2, ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import DashboardGallery, { GalleryImage } from "./DashboardGallery";
 
@@ -92,7 +92,6 @@ const projects: ProjectData[] = [
   },
 ];
 
-// Single parent controls everything — no nested whileInView
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -146,7 +145,6 @@ const ProjectsSection = () => {
   return (
     <TooltipProvider delayDuration={200}>
       <section id="projects" className="relative py-20 sm:py-32 bg-gradient-to-b from-transparent via-secondary/30 to-transparent">
-        {/* Background effect */}
         <div
           className="absolute inset-0"
           style={{
@@ -166,7 +164,6 @@ const ProjectsSection = () => {
             <h3 className="section-title">Featured Work</h3>
           </motion.div>
 
-          {/* Single whileInView controls all cards via variant propagation */}
           <motion.div
             className="grid md:grid-cols-2 gap-5 sm:gap-8"
             variants={containerVariants}
@@ -213,9 +210,33 @@ const ProjectsSection = () => {
                   <p className="relative z-10 text-white/70 text-xs sm:text-sm mt-3 sm:mt-4 font-medium">{project.period}</p>
                 </div>
 
-                {/* Content — all children inherit variants from cardVariants */}
+                {/* Content */}
                 <div className="p-4 sm:p-6 md:p-8">
-                  {/* Metrics — use variant propagation, no separate whileInView */}
+                  {/* Inline dashboard thumbnails */}
+                  <motion.div
+                    className="flex gap-2 mb-5 sm:mb-6 -mt-1"
+                    variants={childFade}
+                  >
+                    {project.gallery.slice(0, 3).map((img, i) => (
+                      <motion.button
+                        key={i}
+                        className="dashboard-thumb flex-1 aspect-[16/10] bg-secondary/50 overflow-hidden"
+                        onClick={() => openGallery(project, i)}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      >
+                        <img
+                          src={img.src}
+                          alt={img.caption}
+                          className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                          loading="lazy"
+                        />
+                      </motion.button>
+                    ))}
+                  </motion.div>
+
+                  {/* Metrics */}
                   <motion.div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
                     {project.highlights.map((highlight, i) => (
                       <motion.div
@@ -236,21 +257,32 @@ const ProjectsSection = () => {
                     {project.description}
                   </motion.p>
 
-                  {/* Tools — variant propagation, no individual whileInView */}
-                  <motion.div className="flex flex-wrap gap-1.5 sm:gap-2" variants={childFade}>
-                    {project.tools.map((tool) => (
-                      <motion.span
-                        key={tool}
-                        className="skill-badge text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
-                        whileHover={{
-                          scale: 1.06,
-                          y: -1,
-                          transition: { type: "spring", stiffness: 400, damping: 25 }
-                        }}
-                      >
-                        {tool}
-                      </motion.span>
-                    ))}
+                  {/* Tools + View button row */}
+                  <motion.div className="flex items-center justify-between gap-3" variants={childFade}>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {project.tools.map((tool) => (
+                        <motion.span
+                          key={tool}
+                          className="skill-badge text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
+                          whileHover={{
+                            scale: 1.06,
+                            y: -1,
+                            transition: { type: "spring", stiffness: 400, damping: 25 }
+                          }}
+                        >
+                          {tool}
+                        </motion.span>
+                      ))}
+                    </div>
+                    <motion.button
+                      onClick={() => openGallery(project)}
+                      className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs sm:text-sm text-primary font-medium hover:text-primary/80 transition-colors"
+                      whileHover={{ x: 3 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    >
+                      View
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </motion.button>
                   </motion.div>
                 </div>
               </motion.div>

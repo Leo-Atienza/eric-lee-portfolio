@@ -9,30 +9,35 @@ const skillCategories = [
     title: "Data Analysis",
     skills: ["Data Cleaning", "Data Validation", "SQL Querying", "KPI Tracking", "Trend Analysis", "ETL Process", "Data Profiling"],
     gradient: "from-blue-500 to-cyan-500",
+    span: "md:col-span-1 md:row-span-2",
   },
   {
     icon: BarChart3,
     title: "Business Analysis",
     skills: ["Process Mapping", "User Stories", "Gap Analysis", "Requirements Gathering", "Workflow Optimization", "Agile"],
     gradient: "from-purple-500 to-pink-500",
+    span: "md:col-span-1",
   },
   {
     icon: Wrench,
     title: "Tools & Technologies",
     skills: ["SQL", "Python", "Power BI", "Tableau", "Excel", "VBA", "Power Query", "Jira", "Confluence"],
     gradient: "from-orange-500 to-amber-500",
+    span: "md:col-span-1",
   },
   {
     icon: FileText,
     title: "Reporting",
     skills: ["Data Visualization", "Interactive Dashboards", "KPI Tracking", "Executive Summaries", "Storytelling"],
     gradient: "from-emerald-500 to-teal-500",
+    span: "md:col-span-1",
   },
   {
     icon: Users,
     title: "Soft Skills",
     skills: ["Analytical Thinking", "Problem Solving", "Communication", "Stakeholder Management", "Collaboration"],
     gradient: "from-rose-500 to-red-500",
+    span: "md:col-span-1",
   },
 ];
 
@@ -73,7 +78,6 @@ const childFade = {
 const SkillsSection = () => {
   return (
     <section id="skills" className="relative py-20 sm:py-32 bg-gradient-to-b from-secondary/30 to-transparent">
-      {/* Background effect */}
       <div
         className="absolute inset-0"
         style={{
@@ -93,8 +97,9 @@ const SkillsSection = () => {
           <h3 className="section-title">Technical & Professional Expertise</h3>
         </motion.div>
 
+        {/* Bento grid: 3 columns with first card spanning 2 rows */}
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 auto-rows-auto"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -104,7 +109,7 @@ const SkillsSection = () => {
             <motion.div
               key={category.title}
               variants={cardVariants}
-              className="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-7 group"
+              className={`glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-7 group ${category.span}`}
               whileHover={{
                 y: -4,
                 transition: { duration: 0.4, ease: silk }
@@ -121,7 +126,6 @@ const SkillsSection = () => {
                 <h4 className="text-lg sm:text-xl font-bold">{category.title}</h4>
               </div>
 
-              {/* Badges inherit from parent cardVariants */}
               <motion.div className="flex flex-wrap gap-2">
                 {category.skills.map((skill) => (
                   <motion.span

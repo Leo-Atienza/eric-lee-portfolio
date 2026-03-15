@@ -2,6 +2,8 @@ import { lazy, Suspense, useEffect } from "react";
 import Lenis from "lenis";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
+import ScrollProgress from "@/components/ScrollProgress";
+import SectionDivider from "@/components/SectionDivider";
 
 const AboutSection = lazy(() => import("@/components/AboutSection"));
 const SkillsSection = lazy(() => import("@/components/SkillsSection"));
@@ -31,14 +33,21 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ScrollProgress />
       <Navigation />
       <HeroSection />
       <Suspense fallback={null}>
+        <SectionDivider />
         <AboutSection />
+        <SectionDivider />
         <SkillsSection />
+        <SectionDivider />
         <ExperienceSection />
+        <SectionDivider />
         <ProjectsSection />
+        <SectionDivider />
         <CertificationsSection />
+        <SectionDivider />
         <ContactSection />
         <Footer />
       </Suspense>

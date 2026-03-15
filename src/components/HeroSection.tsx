@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { ArrowDown, Mail, Linkedin, MapPin, Sparkles } from "lucide-react";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { ArrowDown, Mail, Linkedin, MapPin, Sparkles, TrendingUp, Database, BarChart3 } from "lucide-react";
 
-// Ultra-smooth expo easing — slow start, glacial deceleration
 const silk = [0.16, 1, 0.3, 1] as const;
 
 const containerVariants = {
@@ -53,40 +53,96 @@ const buttonVariants = {
   },
 };
 
+const floatingStats = [
+  { icon: Database, label: "SQL", x: "8%", y: "20%", delay: 1.8 },
+  { icon: BarChart3, label: "Power BI", x: "85%", y: "25%", delay: 2.1 },
+  { icon: TrendingUp, label: "Python", x: "12%", y: "72%", delay: 2.4 },
+];
+
 const HeroSection = () => {
+  const containerRef = useRef<HTMLElement>(null);
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 30 });
+
+  const orbX1 = useTransform(springX, [0, 1], [-30, 30]);
+  const orbY1 = useTransform(springY, [0, 1], [-20, 20]);
+  const orbX2 = useTransform(springX, [0, 1], [20, -20]);
+  const orbY2 = useTransform(springY, [0, 1], [15, -15]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      mouseX.set((e.clientX - rect.left) / rect.width);
+      mouseY.set((e.clientY - rect.top) / rect.height);
+    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background Effects */}
+    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Layered radial gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.12),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,hsl(260_80%_60%/0.08),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_left,hsl(280_70%_60%/0.05),transparent_40%)]" />
 
-      {/* Floating Orbs - hidden on small screens for performance */}
-      <div
-        className="hidden sm:block absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 rounded-full animate-float opacity-30"
+      {/* Cursor-reactive orbs */}
+      <motion.div
+        className="hidden sm:block absolute w-[500px] h-[500px] rounded-full opacity-25"
         style={{
-          background: 'radial-gradient(circle, hsl(217 91% 60% / 0.15) 0%, transparent 70%)',
-          filter: 'blur(40px)',
+          x: orbX1,
+          y: orbY1,
+          top: '15%',
+          left: '15%',
+          background: 'radial-gradient(circle, hsl(217 91% 60% / 0.18) 0%, transparent 70%)',
+          filter: 'blur(50px)',
         }}
       />
-      <div
-        className="hidden sm:block absolute bottom-1/4 right-1/4 w-56 sm:w-80 h-56 sm:h-80 rounded-full animate-float opacity-20"
+      <motion.div
+        className="hidden sm:block absolute w-[400px] h-[400px] rounded-full opacity-20"
         style={{
-          background: 'radial-gradient(circle, hsl(260 80% 60% / 0.2) 0%, transparent 70%)',
-          filter: 'blur(35px)',
-          animationDelay: '-3s',
+          x: orbX2,
+          y: orbY2,
+          bottom: '15%',
+          right: '15%',
+          background: 'radial-gradient(circle, hsl(260 80% 60% / 0.22) 0%, transparent 70%)',
+          filter: 'blur(45px)',
         }}
       />
 
-      {/* Grid Pattern */}
+      {/* Dot grid pattern */}
       <div
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
-          backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
-                           linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px'
+          backgroundImage: `radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
         }}
       />
+
+      {/* Floating stat pills — desktop only */}
+      {floatingStats.map((stat, i) => (
+        <motion.div
+          key={stat.label}
+          className="hidden lg:flex stat-pill absolute"
+          style={{ left: stat.x, top: stat.y }}
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: stat.delay, duration: 0.8, ease: silk }}
+        >
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 4 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
+            className="flex items-center gap-2"
+          >
+            <stat.icon className="w-4 h-4 text-primary" />
+            <span className="text-muted-foreground">{stat.label}</span>
+          </motion.div>
+        </motion.div>
+      ))}
 
       <div className="section-container relative z-10 text-center">
         <motion.div
@@ -104,28 +160,37 @@ const HeroSection = () => {
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-slow" />
           </motion.div>
 
-          {/* Name */}
+          {/* Name — dramatic split */}
           <motion.h1
             variants={nameVariants}
-            className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-bold mb-4 sm:mb-6 md:mb-8 tracking-tight"
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mb-4 sm:mb-6 md:mb-8 tracking-tight leading-[0.9]"
           >
             <motion.span
               className="block"
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.9, delay: 0.3, ease: silk }}
             >
               Eric
             </motion.span>
             <motion.span
-              className="gradient-text-animated"
-              initial={{ opacity: 0, x: 20 }}
+              className="gradient-text-animated block"
+              initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.9, delay: 0.5, ease: silk }}
             >
               Lee
             </motion.span>
           </motion.h1>
+
+          {/* Gradient underline accent */}
+          <motion.div
+            className="mx-auto mb-6 sm:mb-8 h-1 rounded-full"
+            style={{ background: 'var(--gradient-primary)', maxWidth: '120px' }}
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.8, ease: silk }}
+          />
 
           {/* Title and skills */}
           <motion.div variants={itemVariants}>
@@ -140,41 +205,26 @@ const HeroSection = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.7, ease: silk }}
             >
-              <motion.span
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.6, ease: silk }}
-              >
-                Data Analytics
-              </motion.span>
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 0.9, duration: 0.6, ease: silk }}
-              >
-                <Sparkles className="w-4 h-4 text-primary" />
-              </motion.div>
-              <motion.span
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.6, ease: silk }}
-              >
-                Business Intelligence
-              </motion.span>
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 1.1, duration: 0.6, ease: silk }}
-              >
-                <Sparkles className="w-4 h-4 text-primary" />
-              </motion.div>
-              <motion.span
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2, duration: 0.6, ease: silk }}
-              >
-                Process Optimization
-              </motion.span>
+              {["Data Analytics", "Business Intelligence", "Process Optimization"].map((skill, i) => (
+                <motion.div key={skill} className="flex items-center gap-3">
+                  {i > 0 && (
+                    <motion.div
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ delay: 0.8 + i * 0.15, duration: 0.6, ease: silk }}
+                    >
+                      <Sparkles className="w-4 h-4 text-primary" />
+                    </motion.div>
+                  )}
+                  <motion.span
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + i * 0.15, duration: 0.6, ease: silk }}
+                  >
+                    {skill}
+                  </motion.span>
+                </motion.div>
+              ))}
             </motion.div>
 
             {/* Mobile: Stack vertically */}
@@ -248,9 +298,7 @@ const HeroSection = () => {
           <a href="#about" className="inline-flex flex-col items-center gap-3 text-muted-foreground/60 hover:text-primary transition-colors duration-700 group">
             <span className="text-sm font-medium tracking-wide">Scroll to explore</span>
             <motion.div
-              animate={{
-                y: [0, 8, 0],
-              }}
+              animate={{ y: [0, 8, 0] }}
               transition={{
                 duration: 2.8,
                 repeat: Infinity,
