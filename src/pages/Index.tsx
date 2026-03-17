@@ -32,7 +32,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div id="main-content" className="min-h-screen bg-background">
       <ScrollProgress />
       <Navigation />
       <HeroSection />

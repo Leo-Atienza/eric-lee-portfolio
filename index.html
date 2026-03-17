@@ -11,15 +11,51 @@
     <title>Eric Lee | Data Analytics & Business Intelligence</title>
     <meta name="description" content="Portfolio of Eric Lee - Business Technology Management student specializing in SQL, Python, Power BI, and Tableau. Seeking analytics and consulting roles." />
     <meta name="author" content="Eric Lee" />
+    <link rel="canonical" href="https://ericlee.dev/" />
 
     <meta property="og:title" content="Eric Lee | Data Analytics Portfolio" />
     <meta property="og:description" content="Business Technology Management student with expertise in data analytics, SQL, Python, and business intelligence tools." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ericlee.dev/" />
+    <meta property="og:image" content="https://ericlee.dev/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@ericyflee" />
+    <meta name="twitter:image" content="https://ericlee.dev/og-image.png" />
+
+    <!-- Preload critical font -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style" />
+
+    <!-- Plausible Analytics (privacy-friendly, no cookies) -->
+    <script defer data-domain="ericlee.dev" src="https://plausible.io/js/script.js"></script>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Eric Lee",
+      "url": "https://ericlee.dev",
+      "jobTitle": "Business Technology Management Student",
+      "description": "Data Analytics & Business Intelligence specialist with expertise in SQL, Python, Power BI, and Tableau.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Markham",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/eric-yf-lee/"
+      ],
+      "knowsAbout": ["Data Analytics", "Business Intelligence", "SQL", "Python", "Power BI", "Tableau"]
+    }
+    </script>
   </head>
 
   <body>
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:text-sm focus:font-medium">
+      Skip to main content
+    </a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

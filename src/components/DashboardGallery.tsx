@@ -150,11 +150,17 @@ const DashboardGallery = ({
                 src={currentImage.src}
                 alt={currentImage.caption}
                 className={`max-h-full transition-transform duration-300 ${
-                  isZoomed 
-                    ? "max-w-none scale-150" 
+                  isZoomed
+                    ? "max-w-none scale-150"
                     : "max-w-full object-contain"
                 }`}
                 draggable={false}
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (target.src.endsWith(".webp")) {
+                    target.src = target.src.replace(".webp", ".png");
+                  }
+                }}
               />
             </motion.div>
           </AnimatePresence>

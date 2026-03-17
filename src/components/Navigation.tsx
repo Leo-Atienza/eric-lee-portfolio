@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const navItems = [
   { label: "Summary", href: "#about" },
@@ -15,6 +16,10 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     let ticking = false;
@@ -65,6 +70,7 @@ const Navigation = () => {
                 <a
                   key={item.label}
                   href={item.href}
+                  aria-current={activeSection === item.href.substring(1) ? "true" : undefined}
                   className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full ${
                     activeSection === item.href.substring(1)
                       ? "text-primary"
@@ -89,6 +95,17 @@ const Navigation = () => {
               >
                 Resume
               </a>
+              {mounted && (
+                <motion.button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="p-2 rounded-full text-muted-foreground hover:text-foreground transition-colors ml-1"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                >
+                  {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </motion.button>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -152,6 +169,19 @@ const Navigation = () => {
                 >
                   Resume
                 </motion.a>
+                {mounted && (
+                  <motion.button
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: (navItems.length + 1) * 0.05 }}
+                    className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-all duration-300"
+                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                  >
+                    {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                    {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                  </motion.button>
+                )}
               </div>
             </motion.div>
           </>

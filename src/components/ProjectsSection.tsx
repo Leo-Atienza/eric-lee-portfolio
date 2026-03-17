@@ -24,9 +24,9 @@ const projects: ProjectData[] = [
     period: "Nov 2023 – Jan 2024",
     gradient: "from-emerald-500 via-teal-500 to-cyan-500",
     gallery: [
-      { src: "/assets/dashboards/yees_full.png", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/yees_intensity_bar.png", caption: "Electricity Intensity by Property Type" },
-      { src: "/assets/dashboards/yees_supporting.png", caption: "Supporting View" },
+      { src: "/assets/dashboards/yees_full.webp", caption: "Full Dashboard" },
+      { src: "/assets/dashboards/yees_intensity_bar.webp", caption: "Electricity Intensity by Property Type" },
+      { src: "/assets/dashboards/yees_supporting.webp", caption: "Supporting View" },
     ],
     highlights: [
       { metric: "10,000+", label: "Utility records validated" },
@@ -42,9 +42,9 @@ const projects: ProjectData[] = [
     period: "Jan 2026 – Feb 2026",
     gradient: "from-blue-500 via-indigo-500 to-violet-500",
     gallery: [
-      { src: "/assets/dashboards/credit_full.png?v=1", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/credit_scatter_income_debt.png?v=1", caption: "Income vs Debt Burden by Default" },
-      { src: "/assets/dashboards/credit_dti_distribution.png?v=1", caption: "Debt-to-Income Distribution by Default" },
+      { src: "/assets/dashboards/credit_full.webp", caption: "Full Dashboard" },
+      { src: "/assets/dashboards/credit_scatter_income_debt.webp", caption: "Income vs Debt Burden by Default" },
+      { src: "/assets/dashboards/credit_dti_distribution.webp", caption: "Debt-to-Income Distribution by Default" },
     ],
     highlights: [
       { metric: "50%", label: "Prep time reduced" },
@@ -60,9 +60,9 @@ const projects: ProjectData[] = [
     period: "Jan 2026 – Feb 2026",
     gradient: "from-purple-500 via-pink-500 to-rose-500",
     gallery: [
-      { src: "/assets/dashboards/hospital_full.png", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/hospital_admission_type.png", caption: "Admission Type vs Length of Stay" },
-      { src: "/assets/dashboards/hospital_los_distribution.png", caption: "Length of Stay Distribution" },
+      { src: "/assets/dashboards/hospital_full.webp", caption: "Full Dashboard" },
+      { src: "/assets/dashboards/hospital_admission_type.webp", caption: "Admission Type vs Length of Stay" },
+      { src: "/assets/dashboards/hospital_los_distribution.webp", caption: "Length of Stay Distribution" },
     ],
     highlights: [
       { metric: "300,000+", label: "Hospital encounters analyzed" },
@@ -78,9 +78,9 @@ const projects: ProjectData[] = [
     period: "Nov 2025 – Dec 2025",
     gradient: "from-orange-500 via-amber-500 to-yellow-500",
     gallery: [
-      { src: "/assets/dashboards/tesla_full.png", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/tesla_deliveries_trend.png", caption: "Total Deliveries per Year" },
-      { src: "/assets/dashboards/tesla_revenue_per_model.png", caption: "Revenue per Model" },
+      { src: "/assets/dashboards/tesla_full.webp", caption: "Full Dashboard" },
+      { src: "/assets/dashboards/tesla_deliveries_trend.webp", caption: "Total Deliveries per Year" },
+      { src: "/assets/dashboards/tesla_revenue_per_model.webp", caption: "Revenue per Model" },
     ],
     highlights: [
       { metric: "10 Years", label: "Data standardized" },
@@ -231,6 +231,12 @@ const ProjectsSection = () => {
                           alt={img.caption}
                           className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500"
                           loading="lazy"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (target.src.endsWith(".webp")) {
+                              target.src = target.src.replace(".webp", ".png");
+                            }
+                          }}
                         />
                       </motion.button>
                     ))}
