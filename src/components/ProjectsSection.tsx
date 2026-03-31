@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import { BarChart2, ExternalLink } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import DashboardGallery, { GalleryImage } from "./DashboardGallery";
-
-const silk = [0.16, 1, 0.3, 1] as const;
+import { springs } from "@/lib/springs";
+import { useTiltCard } from "@/hooks/useTiltCard";
+import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
 interface ProjectData {
   title: string;
@@ -109,8 +110,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.85,
-      ease: silk,
+      ...springs.standard,
       staggerChildren: 0.05,
       delayChildren: 0.12,
     },
@@ -122,11 +122,26 @@ const childFade = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: silk },
+    transition: springs.standard,
   },
 };
 
+const TiltProjectCard = ({ children }: { children: React.ReactNode }) => {
+  const { ref, rotateX, rotateY, onMouseMove, onMouseLeave } = useTiltCard(6);
+  return (
+    <motion.div
+      ref={ref}
+      style={{ rotateX, rotateY, transformPerspective: 1000 }}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
 const ProjectsSection = () => {
+  const textRef = useGSAPTextReveal();
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [activeProject, setActiveProject] = useState<ProjectData | null>(null);
   const [initialImageIndex, setInitialImageIndex] = useState(0);
@@ -152,16 +167,16 @@ const ProjectsSection = () => {
           }}
         />
 
-        <div className="section-container relative z-10">
+        <div ref={textRef} className="section-container relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: silk }}
+            transition={springs.standard}
             className="text-center mb-16"
           >
             <h2 className="section-label mb-4">Projects</h2>
-            <h3 className="section-title">Featured Work</h3>
+            <h3 className="section-title gsap-reveal">Featured Work</h3>
           </motion.div>
 
           <motion.div
@@ -172,15 +187,12 @@ const ProjectsSection = () => {
             viewport={{ once: true, margin: "-100px" }}
           >
             {projects.map((project) => (
-              <motion.div
-                key={project.title}
-                variants={cardVariants}
-                className="glass-card rounded-2xl sm:rounded-3xl overflow-hidden group"
-                whileHover={{
-                  y: -4,
-                  transition: { duration: 0.4, ease: silk }
-                }}
-              >
+              <TiltProjectCard key={project.title}>
+                <motion.div
+                  variants={cardVariants}
+                  className="glass-card rounded-2xl sm:rounded-3xl overflow-hidden group h-full"
+                  whileHover={{ y: -4, transition: springs.standard }}
+                >
                 {/* Header with gradient */}
                 <div className={`p-4 sm:p-6 md:p-8 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
@@ -197,7 +209,7 @@ const ProjectsSection = () => {
                           className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/15 text-white hover:bg-white/25 transition-colors"
                           whileHover={{ scale: 1.08 }}
                           whileTap={{ scale: 0.95 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                          transition={springs.snappy}
                         >
                           <BarChart2 className="w-5 h-5 sm:w-7 sm:h-7" />
                         </motion.button>
@@ -224,13 +236,16 @@ const ProjectsSection = () => {
                         onClick={() => openGallery(project, i)}
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.98 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        transition={springs.snappy}
                       >
                         <img
                           src={img.src}
                           alt={img.caption}
-                          className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                          width={320}
+                          height={200}
+                          className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500 img-blur-load"
                           loading="lazy"
+                          onLoad={(e) => e.currentTarget.classList.add("loaded")}
                           onError={(e) => {
                             const target = e.currentTarget;
                             if (target.src.endsWith(".webp")) {
@@ -273,7 +288,7 @@ const ProjectsSection = () => {
                           whileHover={{
                             scale: 1.06,
                             y: -1,
-                            transition: { type: "spring", stiffness: 400, damping: 25 }
+                            transition: springs.snappy
                           }}
                         >
                           {tool}
@@ -284,7 +299,7 @@ const ProjectsSection = () => {
                       onClick={() => openGallery(project)}
                       className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs sm:text-sm text-primary font-medium hover:text-primary/80 transition-colors"
                       whileHover={{ x: 3 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      transition={springs.snappy}
                     >
                       View
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -292,6 +307,7 @@ const ProjectsSection = () => {
                   </motion.div>
                 </div>
               </motion.div>
+              </TiltProjectCard>
             ))}
           </motion.div>
         </div>

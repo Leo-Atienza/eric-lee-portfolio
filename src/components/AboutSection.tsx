@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
 import { GraduationCap, Calendar, BookOpen, Sparkles } from "lucide-react";
-
-// Ultra-smooth expo easing — slow start, glacial deceleration
-const silk = [0.16, 1, 0.3, 1] as const;
+import { springs } from "@/lib/springs";
+import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
 const sectionVariants = {
   hidden: { opacity: 0 },
@@ -21,8 +20,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
-      ease: silk,
+      ...springs.standard,
       staggerChildren: 0.04,
       delayChildren: 0.1,
     },
@@ -34,11 +32,12 @@ const childFade = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: silk },
+    transition: springs.standard,
   },
 };
 
 const AboutSection = () => {
+  const textRef = useGSAPTextReveal();
   const coursework = [
     "Business Systems Analysis",
     "Statistics",
@@ -61,16 +60,16 @@ const AboutSection = () => {
         }}
       />
 
-      <div className="section-container relative z-10">
+      <div ref={textRef} className="section-container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: silk }}
+          transition={springs.standard}
           className="mb-16"
         >
           <h2 className="section-label mb-4">Summary</h2>
-          <h3 className="section-title">Education & Background</h3>
+          <h3 className="section-title gsap-reveal">Education & Background</h3>
         </motion.div>
 
         <motion.div
@@ -83,13 +82,13 @@ const AboutSection = () => {
           <motion.div
             variants={cardVariants}
             className="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 group"
-            whileHover={{ y: -4, transition: { duration: 0.4, ease: silk } }}
+            whileHover={{ y: -4, transition: springs.standard }}
           >
             <div className="flex items-start gap-3 sm:gap-5 mb-6 sm:mb-8">
               <motion.div
                 className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 text-primary"
                 whileHover={{ scale: 1.06 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                transition={springs.bouncy}
               >
                 <GraduationCap className="w-5 h-5 sm:w-7 sm:h-7" />
               </motion.div>
@@ -121,18 +120,17 @@ const AboutSection = () => {
           <motion.div
             variants={cardVariants}
             className="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 group"
-            whileHover={{ y: -4, transition: { duration: 0.4, ease: silk } }}
+            whileHover={{ y: -4, transition: springs.standard }}
           >
             <div className="flex items-center gap-3 mb-6 sm:mb-8">
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 45 }}
-                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                transition={springs.bouncy}
               >
                 <Sparkles className="w-5 h-5 text-primary" />
               </motion.div>
               <h4 className="text-xl sm:text-2xl font-bold">Relevant Coursework</h4>
             </div>
-            {/* Badges inherit animation from parent cardVariants */}
             <motion.div className="flex flex-wrap gap-2 sm:gap-3">
               {coursework.map((course) => (
                 <motion.span
@@ -142,7 +140,7 @@ const AboutSection = () => {
                   whileHover={{
                     scale: 1.05,
                     y: -1,
-                    transition: { type: "spring", stiffness: 400, damping: 25 }
+                    transition: springs.bouncy,
                   }}
                 >
                   {course}

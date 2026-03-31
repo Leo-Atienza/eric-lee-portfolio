@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
+import { springs } from "@/lib/springs";
 
 const navItems = [
   { label: "Summary", href: "#about" },
@@ -22,28 +23,29 @@ const Navigation = () => {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 50);
-
-          // Update active section based on scroll position
-          const sections = navItems.map(item => item.href.substring(1));
-          for (const section of sections.reverse()) {
-            const element = document.getElementById(section);
-            if (element && window.scrollY >= element.offsetTop - 200) {
-              setActiveSection(section);
-              break;
-            }
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    const sectionIds = navItems.map(item => item.href.substring(1));
+    const observers: IntersectionObserver[] = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        },
+        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observers.forEach(o => o.disconnect());
+    };
   }, []);
 
   return (
@@ -51,7 +53,7 @@ const Navigation = () => {
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ ...springs.gentle, delay: 0.1 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out ${
           isScrolled
             ? "bg-background/95 border-b border-border/30 shadow-lg"
@@ -71,7 +73,7 @@ const Navigation = () => {
                   key={item.label}
                   href={item.href}
                   aria-current={activeSection === item.href.substring(1) ? "true" : undefined}
-                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full ${
+                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full group ${
                     activeSection === item.href.substring(1)
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
@@ -82,9 +84,10 @@ const Navigation = () => {
                     <motion.span
                       layoutId="activeNav"
                       className="absolute inset-0 bg-primary/10 rounded-full -z-10"
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      transition={springs.snappy}
                     />
                   )}
+                  <span className="absolute bottom-1 left-4 right-4 h-px bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </a>
               ))}
               <a

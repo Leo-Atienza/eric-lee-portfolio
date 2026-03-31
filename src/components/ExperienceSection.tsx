@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
-
-const silk = [0.16, 1, 0.3, 1] as const;
+import { springs } from "@/lib/springs";
+import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
 const experiences = [
   {
@@ -56,8 +56,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
-      ease: silk,
+      ...springs.standard,
       staggerChildren: 0.06,
       delayChildren: 0.1,
     },
@@ -69,11 +68,12 @@ const childFade = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.55, ease: silk },
+    transition: springs.standard,
   },
 };
 
 const ExperienceSection = () => {
+  const textRef = useGSAPTextReveal();
   return (
     <section id="experience" className="relative py-20 sm:py-32 overflow-hidden">
       {/* Background effect */}
@@ -85,26 +85,26 @@ const ExperienceSection = () => {
         }}
       />
 
-      <div className="section-container relative z-10">
+      <div ref={textRef} className="section-container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: silk }}
+          transition={springs.standard}
           className="mb-16"
         >
           <h2 className="section-label mb-4">Experience</h2>
-          <h3 className="section-title">Work History</h3>
+          <h3 className="section-title gsap-reveal">Work History</h3>
         </motion.div>
 
-        <div className="relative">
+        <div className="relative experience-container">
           {/* Timeline line */}
           <motion.div
-            className="absolute left-0 md:left-8 top-0 bottom-0 w-px timeline-line hidden md:block"
+            className="timeline-line-el absolute left-0 md:left-8 top-0 bottom-0 w-px timeline-line hidden md:block"
             initial={{ scaleY: 0, originY: 0 }}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: silk }}
+            transition={springs.gentle}
           />
 
           <motion.div
@@ -118,28 +118,23 @@ const ExperienceSection = () => {
               <motion.div
                 key={`${exp.title}-${exp.company}`}
                 variants={cardVariants}
-                className="relative md:pl-24"
+                className="relative md:pl-24 experience-card"
               >
                 {/* Timeline dot */}
                 <motion.div
-                  className="absolute left-0 md:left-6 top-10 timeline-dot hidden md:block"
+                  className="timeline-dot-el absolute left-0 md:left-6 top-10 timeline-dot hidden md:block"
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   viewport={{ once: true }}
                   transition={{
                     delay: index * 0.1 + 0.15,
-                    type: "spring",
-                    stiffness: 350,
-                    damping: 25
+                    ...springs.bouncy,
                   }}
                 />
 
                 <motion.div
                   className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 group"
-                  whileHover={{
-                    y: -3,
-                    transition: { duration: 0.4, ease: silk }
-                  }}
+                  whileHover={{ y: -3, transition: springs.standard }}
                 >
                   <div className="flex flex-col gap-3 mb-5 sm:mb-6">
                     <div>
@@ -158,7 +153,6 @@ const ExperienceSection = () => {
                     </div>
                   </div>
 
-                  {/* Achievements inherit from parent cardVariants */}
                   <ul className="space-y-3 sm:space-y-4">
                     {exp.achievements.map((achievement, i) => (
                       <motion.li

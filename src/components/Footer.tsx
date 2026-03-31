@@ -1,11 +1,10 @@
 import { motion } from "framer-motion";
 import { Heart, ArrowUp } from "lucide-react";
-
-const silk = [0.16, 1, 0.3, 1] as const;
+import { springs } from "@/lib/springs";
 
 const Footer = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.dispatchEvent(new CustomEvent('lenis:scrollTop'));
   };
 
   return (
@@ -15,7 +14,7 @@ const Footer = () => {
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.8, ease: silk }}
+          transition={springs.standard}
           className="flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div className="flex flex-col items-center md:items-start gap-2">
@@ -39,8 +38,8 @@ const Footer = () => {
               onClick={scrollToTop}
               className="p-2.5 rounded-full glass-card text-muted-foreground hover:text-primary transition-colors duration-300"
               whileHover={{ y: -2, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              whileTap={{ scale: 0.96, transition: springs.snappy }}
+              transition={springs.snappy}
               aria-label="Back to top"
             >
               <ArrowUp className="w-4 h-4" />

@@ -223,6 +223,8 @@ const DashboardGallery = ({
                   <img
                     src={image.src}
                     alt={`Thumbnail ${index + 1}`}
+                    width={64}
+                    height={40}
                     className="w-full h-full object-cover"
                     draggable={false}
                   />

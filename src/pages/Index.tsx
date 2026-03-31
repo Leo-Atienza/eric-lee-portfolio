@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import ScrollProgress from "@/components/ScrollProgress";
 import SectionDivider from "@/components/SectionDivider";
+import SectionSkeleton from "@/components/SectionSkeleton";
 
 const AboutSection = lazy(() => import("@/components/AboutSection"));
 const SkillsSection = lazy(() => import("@/components/SkillsSection"));
@@ -22,13 +23,21 @@ const Index = () => {
       smoothWheel: true,
     });
 
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
-    return () => lenis.destroy();
+    const handleScrollTop = () => lenis.scrollTo(0);
+    window.addEventListener('lenis:scrollTop', handleScrollTop);
+
+    return () => {
+      window.removeEventListener('lenis:scrollTop', handleScrollTop);
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
   }, []);
 
   return (
@@ -36,7 +45,7 @@ const Index = () => {
       <ScrollProgress />
       <Navigation />
       <HeroSection />
-      <Suspense fallback={null}>
+      <Suspense fallback={<SectionSkeleton />}>
         <SectionDivider />
         <AboutSection />
         <SectionDivider />

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Award, Calendar, Sparkles } from "lucide-react";
-
-const silk = [0.16, 1, 0.3, 1] as const;
+import { springs } from "@/lib/springs";
+import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
 const certifications = [
   {
@@ -41,14 +41,12 @@ const cardVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.75,
-      ease: silk,
-    },
+    transition: springs.standard,
   },
 };
 
 const CertificationsSection = () => {
+  const textRef = useGSAPTextReveal();
   return (
     <section id="certifications" className="relative py-20 sm:py-32 overflow-hidden">
       {/* Background effect */}
@@ -59,16 +57,16 @@ const CertificationsSection = () => {
         }}
       />
 
-      <div className="section-container relative z-10">
+      <div ref={textRef} className="section-container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: silk }}
+          transition={springs.standard}
           className="mb-16"
         >
           <h2 className="section-label mb-4">Certifications</h2>
-          <h3 className="section-title">Professional Development</h3>
+          <h3 className="section-title gsap-reveal">Professional Development</h3>
         </motion.div>
 
         <motion.div
@@ -83,15 +81,13 @@ const CertificationsSection = () => {
               key={cert.title}
               variants={cardVariants}
               className="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 hover:border-primary/30 transition-colors duration-500 group"
-              whileHover={{
-                y: -3,
-                transition: { duration: 0.4, ease: silk }
-              }}
+              whileHover={{ y: -3, transition: springs.standard }}
             >
               <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <motion.div
                   className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 text-primary group-hover:scale-105 transition-transform duration-500"
-                  whileHover={{ rotate: 3 }}
+                  whileHover={{ y: -2, rotate: 8, scale: 1.1 }}
+                  transition={springs.bouncy}
                 >
                   <Award className="w-5 h-5 sm:w-6 sm:h-6" />
                 </motion.div>

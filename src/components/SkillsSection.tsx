@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Database, BarChart3, Wrench, Users, FileText } from "lucide-react";
-
-const silk = [0.16, 1, 0.3, 1] as const;
+import { springs } from "@/lib/springs";
+import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
 const skillCategories = [
   {
@@ -58,8 +58,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.75,
-      ease: silk,
+      ...springs.standard,
       staggerChildren: 0.035,
       delayChildren: 0.08,
     },
@@ -71,11 +70,12 @@ const childFade = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.45, ease: silk },
+    transition: springs.standard,
   },
 };
 
 const SkillsSection = () => {
+  const textRef = useGSAPTextReveal();
   return (
     <section id="skills" className="relative py-20 sm:py-32 bg-gradient-to-b from-secondary/30 to-transparent">
       <div
@@ -85,19 +85,18 @@ const SkillsSection = () => {
         }}
       />
 
-      <div className="section-container relative z-10">
+      <div ref={textRef} className="section-container relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: silk }}
+          transition={springs.standard}
           className="text-center mb-16"
         >
           <h2 className="section-label mb-4">Skills</h2>
-          <h3 className="section-title">Technical & Professional Expertise</h3>
+          <h3 className="section-title gsap-reveal">Technical & Professional Expertise</h3>
         </motion.div>
 
-        {/* Bento grid: 3 columns with first card spanning 2 rows */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 auto-rows-auto"
           variants={containerVariants}
@@ -110,16 +109,13 @@ const SkillsSection = () => {
               key={category.title}
               variants={cardVariants}
               className={`glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-7 group ${category.span}`}
-              whileHover={{
-                y: -4,
-                transition: { duration: 0.4, ease: silk }
-              }}
+              whileHover={{ y: -4, transition: springs.standard }}
             >
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <motion.div
                   className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br ${category.gradient} text-white shadow-lg`}
-                  whileHover={{ scale: 1.08 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                  whileHover={{ scale: 1.08, rotate: 6 }}
+                  transition={springs.bouncy}
                 >
                   <category.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                 </motion.div>
@@ -135,7 +131,7 @@ const SkillsSection = () => {
                     whileHover={{
                       scale: 1.06,
                       y: -1,
-                      transition: { type: "spring", stiffness: 400, damping: 25 }
+                      transition: springs.bouncy,
                     }}
                   >
                     {skill}
