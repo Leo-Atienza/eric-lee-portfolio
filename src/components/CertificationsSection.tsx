@@ -118,7 +118,7 @@ const CertificationsSection = () => {
             <motion.div
               key={cert.title}
               variants={cardVariants}
-              className="glass-card rounded-2xl sm:rounded-3xl overflow-hidden hover:border-primary/30 transition-colors duration-500 group"
+              className="glass-card rounded-2xl sm:rounded-3xl overflow-hidden group"
               whileHover={{ y: -4, transition: springs.standard }}
             >
               {/* Colored top accent bar */}
