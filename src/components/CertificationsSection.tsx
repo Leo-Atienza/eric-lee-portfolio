@@ -18,10 +18,40 @@ const certifications = [
     status: "Completed",
   },
   {
+    title: "Manage GA4 Data and Learn to Read Reports",
+    issuer: "Google Analytics",
+    period: "February 2026",
+    status: "Completed",
+  },
+  {
     title: "CompTIA A+ Core 1 and Core 2",
     issuer: "CompTIA CertMaster Learn",
     period: "September 2025 – Present",
     status: "In Progress",
+  },
+  {
+    title: "QBO ProAdvisor Certification",
+    issuer: "QuickBooks Online",
+    period: "March 2026 – October 2027",
+    status: "Completed",
+  },
+  {
+    title: "Salesforce CRM Trailblazer Badge",
+    issuer: "Salesforce",
+    period: "March 2026",
+    status: "Completed",
+  },
+  {
+    title: "Process Mapping for Business Analyst",
+    issuer: "Salesforce Trailhead",
+    period: "March 2026",
+    status: "Completed",
+  },
+  {
+    title: "Essential Business Analyst Skills",
+    issuer: "Salesforce Trailhead",
+    period: "March 2026",
+    status: "Completed",
   },
 ];
 
@@ -70,7 +100,7 @@ const CertificationsSection = () => {
         </motion.div>
 
         <motion.div
-          className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
