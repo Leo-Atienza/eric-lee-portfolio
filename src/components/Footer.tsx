@@ -1,12 +1,8 @@
 import { motion } from "framer-motion";
-import { Heart, ArrowUp } from "lucide-react";
+import { Heart } from "lucide-react";
 import { springs } from "@/lib/springs";
 
 const Footer = () => {
-  const scrollToTop = () => {
-    window.dispatchEvent(new CustomEvent('lenis:scrollTop'));
-  };
-
   return (
     <footer className="relative py-12 sm:py-16 border-t border-border/50">
       <div className="max-w-6xl mx-auto px-6">
@@ -30,21 +26,9 @@ const Footer = () => {
             Built with <Heart className="w-4 h-4 text-rose-500 fill-rose-500" /> for data & analytics
           </p>
 
-          <div className="flex items-center gap-4">
-            <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()}
-            </p>
-            <motion.button
-              onClick={scrollToTop}
-              className="p-2.5 rounded-full glass-card text-muted-foreground hover:text-primary transition-colors duration-300"
-              whileHover={{ y: -2, scale: 1.05 }}
-              whileTap={{ scale: 0.96, transition: springs.snappy }}
-              transition={springs.snappy}
-              aria-label="Back to top"
-            >
-              <ArrowUp className="w-4 h-4" />
-            </motion.button>
-          </div>
+          <p className="text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()}
+          </p>
         </motion.div>
       </div>
     </footer>

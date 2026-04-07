@@ -133,8 +133,10 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  *,
+  ::before,
+  ::after {
+    border-color: hsl(var(--border));
   }
 
   html, body {
@@ -255,12 +257,11 @@
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-card);
     contain: layout style;
-    transition: border-color 0.5s ease-out, box-shadow 0.5s ease-out;
+    transition: border-color 0.5s ease-out;
   }
 
   .glass-card:hover {
     border-color: hsl(222 30% 24% / 0.7);
-    box-shadow: var(--shadow-elevated), var(--glow-soft);
   }
 
   .gradient-text {
