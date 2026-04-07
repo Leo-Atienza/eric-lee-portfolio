@@ -1,7 +1,12 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { springs } from "@/lib/springs";
 import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const experiences = [
   {
@@ -9,6 +14,7 @@ const experiences = [
     company: "NeedList.org",
     location: "Toronto, ON",
     period: "June 2025 – August 2025",
+    duration: "3 months",
     type: "Volunteer",
     achievements: [
       "Improved tax reporting with Excel formulas and data validation, cutting calculation time by 50%",
@@ -21,6 +27,7 @@ const experiences = [
     company: "Seneca Polytechnic",
     location: "Toronto, ON",
     period: "May 2025 – August 2025",
+    duration: "4 months",
     achievements: [
       "Improved pricing and budgeting by benchmarking 12 competitors and building a forecast model",
       "Reduced response time by building an intake workflow for 25 weekly requests, improving turnaround by 30%",
@@ -32,6 +39,7 @@ const experiences = [
     company: "Seneca Polytechnic",
     location: "Toronto, ON",
     period: "August 2024 – Present",
+    duration: "1+ year",
     achievements: [
       "Resolved customer issues on the same day by prioritizing high-volume requests, increasing same-day resolution by 20%",
       "Documented cases in Excel and troubleshot issues before escalation, reducing repeat follow-ups by 25%",
@@ -74,6 +82,32 @@ const childFade = {
 
 const ExperienceSection = () => {
   const textRef = useGSAPTextReveal();
+
+  // GSAP scroll-driven timeline progress
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".timeline-line-el",
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".experience-container",
+            start: "top 60%",
+            end: "bottom 40%",
+            scrub: 0.5,
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section id="experience" className="relative py-20 sm:py-32 overflow-hidden">
       {/* Background effect */}
@@ -98,13 +132,10 @@ const ExperienceSection = () => {
         </motion.div>
 
         <div className="relative experience-container">
-          {/* Timeline line */}
-          <motion.div
+          {/* Timeline line — GSAP scroll-driven */}
+          <div
             className="timeline-line-el absolute left-0 md:left-8 top-0 bottom-0 w-px timeline-line hidden md:block"
-            initial={{ scaleY: 0, originY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true }}
-            transition={springs.gentle}
+            style={{ transformOrigin: "top", transform: "scaleY(0)" }}
           />
 
           <motion.div
@@ -114,23 +145,23 @@ const ExperienceSection = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
           >
-            {experiences.map((exp, index) => (
+            {experiences.map((exp) => (
               <motion.div
                 key={`${exp.title}-${exp.company}`}
                 variants={cardVariants}
                 className="relative md:pl-24 experience-card"
               >
-                {/* Timeline dot */}
+                {/* Timeline dot with company initial */}
                 <motion.div
-                  className="timeline-dot-el absolute left-0 md:left-6 top-10 timeline-dot hidden md:block"
+                  className="timeline-dot-el absolute left-0 md:left-[22px] top-10 w-5 h-5 rounded-full hidden md:flex items-center justify-center text-[8px] font-bold text-white shadow-lg"
+                  style={{ background: 'var(--gradient-primary)' }}
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{
-                    delay: index * 0.1 + 0.15,
-                    ...springs.bouncy,
-                  }}
-                />
+                  transition={springs.bouncy}
+                >
+                  {exp.company.charAt(0)}
+                </motion.div>
 
                 <motion.div
                   className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 group"
@@ -148,8 +179,11 @@ const ExperienceSection = () => {
                       </div>
                       <p className="text-primary font-semibold text-base sm:text-lg">{exp.company}</p>
                     </div>
-                    <div className="text-xs sm:text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2 flex-wrap text-xs sm:text-sm text-muted-foreground">
                       <p className="font-medium">{exp.period} • {exp.location}</p>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                        {exp.duration}
+                      </span>
                     </div>
                   </div>
 

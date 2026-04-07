@@ -3,10 +3,12 @@ import Lenis from "lenis";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import ScrollProgress from "@/components/ScrollProgress";
+import BackToTopFAB from "@/components/BackToTopFAB";
 import SectionDivider from "@/components/SectionDivider";
 import SectionSkeleton from "@/components/SectionSkeleton";
 
 const AboutSection = lazy(() => import("@/components/AboutSection"));
+const StatsSection = lazy(() => import("@/components/StatsSection"));
 const SkillsSection = lazy(() => import("@/components/SkillsSection"));
 const ExperienceSection = lazy(() => import("@/components/ExperienceSection"));
 const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
@@ -43,11 +45,14 @@ const Index = () => {
   return (
     <div id="main-content" className="min-h-screen bg-background">
       <ScrollProgress />
+      <BackToTopFAB />
       <Navigation />
       <HeroSection />
       <Suspense fallback={<SectionSkeleton />}>
         <SectionDivider />
         <AboutSection />
+        <SectionDivider />
+        <StatsSection />
         <SectionDivider />
         <SkillsSection />
         <SectionDivider />

@@ -1,5 +1,5 @@
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { ArrowDown, Mail, Linkedin, MapPin, Sparkles, TrendingUp, Database, BarChart3 } from "lucide-react";
 import { springs } from "@/lib/springs";
 import { useMagneticButton } from "@/hooks/useMagneticButton";
@@ -54,10 +54,13 @@ const floatingStats = [
   { icon: TrendingUp, label: "Python", x: "12%", y: "72%", delay: 2.4 },
 ];
 
+const rotatingTitles = ["Data Analyst", "Business Intelligence", "Process Optimizer", "Dashboard Builder"];
+
 const HeroSection = () => {
   const containerRef = useRef<HTMLElement>(null);
   const magnetic1 = useMagneticButton(0.25);
   const magnetic2 = useMagneticButton(0.25);
+  const [titleIndex, setTitleIndex] = useState(0);
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
@@ -127,6 +130,17 @@ const HeroSection = () => {
     });
 
     return () => ctx.revert();
+  }, []);
+
+  // Rotating title interval
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
+    const interval = setInterval(() => {
+      setTitleIndex((prev) => (prev + 1) % rotatingTitles.length);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -240,9 +254,25 @@ const HeroSection = () => {
 
           {/* Title and skills */}
           <motion.div variants={itemVariants}>
-            <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-2xl mx-auto mb-4 font-light tracking-tight">
+            <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-2xl mx-auto mb-3 font-light tracking-tight">
               Business Technology Management
             </p>
+
+            {/* Rotating specialty title */}
+            <div className="h-7 sm:h-8 md:h-9 mb-4 flex items-center justify-center overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={rotatingTitles[titleIndex]}
+                  className="text-sm sm:text-lg md:text-xl gradient-text font-medium"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={springs.standard}
+                >
+                  {rotatingTitles[titleIndex]}
+                </motion.span>
+              </AnimatePresence>
+            </div>
 
             {/* Desktop: Horizontal with sparkles */}
             <motion.div

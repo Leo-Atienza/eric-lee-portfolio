@@ -3,41 +3,97 @@ import { Database, BarChart3, Wrench, Users, FileText } from "lucide-react";
 import { springs } from "@/lib/springs";
 import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
-const skillCategories = [
+interface Skill {
+  name: string;
+  proficiency: number;
+}
+
+interface SkillCategory {
+  icon: typeof Database;
+  title: string;
+  skills: Skill[];
+  gradient: string;
+  span: string;
+  type: "bars" | "badges";
+}
+
+const skillCategories: SkillCategory[] = [
   {
     icon: Database,
     title: "Data Analysis",
-    skills: ["Data Cleaning", "Data Validation", "SQL Querying", "KPI Tracking", "Trend Analysis", "ETL Process", "Data Profiling"],
+    skills: [
+      { name: "SQL Querying", proficiency: 95 },
+      { name: "Data Cleaning", proficiency: 90 },
+      { name: "Data Validation", proficiency: 90 },
+      { name: "KPI Tracking", proficiency: 85 },
+      { name: "Trend Analysis", proficiency: 85 },
+      { name: "ETL Process", proficiency: 80 },
+      { name: "Data Profiling", proficiency: 75 },
+    ],
     gradient: "from-blue-500 to-cyan-500",
     span: "md:col-span-1 md:row-span-2",
+    type: "bars",
   },
   {
     icon: BarChart3,
     title: "Business Analysis",
-    skills: ["Process Mapping", "User Stories", "Gap Analysis", "Requirements Gathering", "Workflow Optimization", "Agile"],
+    skills: [
+      { name: "Requirements Gathering", proficiency: 90 },
+      { name: "Process Mapping", proficiency: 88 },
+      { name: "User Stories", proficiency: 85 },
+      { name: "Gap Analysis", proficiency: 82 },
+      { name: "Workflow Optimization", proficiency: 80 },
+      { name: "Agile", proficiency: 78 },
+    ],
     gradient: "from-purple-500 to-pink-500",
     span: "md:col-span-1",
+    type: "bars",
   },
   {
     icon: Wrench,
     title: "Tools & Technologies",
-    skills: ["SQL", "Python", "Power BI", "Tableau", "Excel", "VBA", "Power Query", "Jira", "Confluence"],
+    skills: [
+      { name: "SQL", proficiency: 95 },
+      { name: "Excel", proficiency: 92 },
+      { name: "Power BI", proficiency: 90 },
+      { name: "Python", proficiency: 85 },
+      { name: "Tableau", proficiency: 82 },
+      { name: "VBA", proficiency: 75 },
+      { name: "Power Query", proficiency: 80 },
+      { name: "Jira", proficiency: 78 },
+      { name: "Confluence", proficiency: 75 },
+    ],
     gradient: "from-orange-500 to-amber-500",
     span: "md:col-span-1",
+    type: "bars",
   },
   {
     icon: FileText,
     title: "Reporting",
-    skills: ["Data Visualization", "Interactive Dashboards", "KPI Tracking", "Executive Summaries", "Storytelling"],
+    skills: [
+      { name: "Data Visualization", proficiency: 92 },
+      { name: "Interactive Dashboards", proficiency: 90 },
+      { name: "KPI Tracking", proficiency: 88 },
+      { name: "Executive Summaries", proficiency: 82 },
+      { name: "Storytelling", proficiency: 80 },
+    ],
     gradient: "from-emerald-500 to-teal-500",
     span: "md:col-span-1",
+    type: "bars",
   },
   {
     icon: Users,
     title: "Soft Skills",
-    skills: ["Analytical Thinking", "Problem Solving", "Communication", "Stakeholder Management", "Collaboration"],
+    skills: [
+      { name: "Analytical Thinking", proficiency: 0 },
+      { name: "Problem Solving", proficiency: 0 },
+      { name: "Communication", proficiency: 0 },
+      { name: "Stakeholder Management", proficiency: 0 },
+      { name: "Collaboration", proficiency: 0 },
+    ],
     gradient: "from-rose-500 to-red-500",
     span: "md:col-span-1",
+    type: "badges",
   },
 ];
 
@@ -122,22 +178,53 @@ const SkillsSection = () => {
                 <h4 className="text-lg sm:text-xl font-bold">{category.title}</h4>
               </div>
 
-              <motion.div className="flex flex-wrap gap-2">
-                {category.skills.map((skill) => (
-                  <motion.span
-                    key={skill}
-                    variants={childFade}
-                    className="skill-badge text-sm"
-                    whileHover={{
-                      scale: 1.06,
-                      y: -1,
-                      transition: springs.bouncy,
-                    }}
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
-              </motion.div>
+              {category.type === "bars" ? (
+                <div className="space-y-3 sm:space-y-4">
+                  {category.skills.map((skill, i) => (
+                    <motion.div
+                      key={skill.name}
+                      variants={childFade}
+                      className="group/bar"
+                    >
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-sm text-muted-foreground group-hover/bar:text-foreground transition-colors duration-300">
+                          {skill.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground/60 tabular-nums">
+                          {skill.proficiency}%
+                        </span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-secondary overflow-hidden">
+                        <motion.div
+                          className={`h-full rounded-full bg-gradient-to-r ${category.gradient}`}
+                          style={{ width: `${skill.proficiency}%`, transformOrigin: "left" }}
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: i * 0.06, ...springs.standard }}
+                        />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <motion.div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <motion.span
+                      key={skill.name}
+                      variants={childFade}
+                      className="skill-badge text-sm"
+                      whileHover={{
+                        scale: 1.06,
+                        y: -1,
+                        transition: springs.bouncy,
+                      }}
+                    >
+                      {skill.name}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              )}
             </motion.div>
           ))}
         </motion.div>
