@@ -19,9 +19,13 @@ const stats: StatItem[] = [
   { value: 9, label: "Certifications", icon: Award },
 ];
 
+// Hoisted: Intl.NumberFormat construction is one of V8's slowest ops (locale data alloc).
+// Called every spring frame × 4 counters — keeping it module-scoped prevents reconstruction.
+const INT_FORMATTER = new Intl.NumberFormat("en-US");
+
 const formatNumber = (val: number, decimals = 0): string => {
   if (decimals > 0) return val.toFixed(decimals);
-  return new Intl.NumberFormat("en-US").format(Math.round(val));
+  return INT_FORMATTER.format(Math.round(val));
 };
 
 const AnimatedCounter = ({ stat }: { stat: StatItem }) => {

@@ -141,7 +141,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section ref={containerRef} id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       {/* Layered radial gradients (theme-aware via CSS vars) */}
       <div
         aria-hidden="true"
@@ -267,12 +267,12 @@ const HeroSection = () => {
 
           {/* Title and skills */}
           <motion.div variants={itemVariants}>
-            <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-2xl mx-auto mb-3 font-light tracking-tight">
+            <p className="text-base sm:text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-2xl mx-auto mb-3 font-normal tracking-tight">
               Business Technology Management
             </p>
 
-            {/* Rotating specialty title */}
-            <div className="h-7 sm:h-8 md:h-9 mb-4 flex items-center justify-center overflow-hidden">
+            {/* Rotating specialty title — height accounts for descenders ('p' in "Process Optimizer") */}
+            <div className="h-8 sm:h-9 md:h-10 mb-4 flex items-center justify-center overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={rotatingTitles[titleIndex]}

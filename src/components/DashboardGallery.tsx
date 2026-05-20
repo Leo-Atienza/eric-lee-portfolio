@@ -1,8 +1,15 @@
 import { useState, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, Download } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+
+// iPhone Safari does not honor requestFullscreen on the document element — only
+// on <video>. Feature-detect so users see one fewer button rather than a broken one.
+const FULLSCREEN_SUPPORTED =
+  typeof document !== "undefined" && Boolean(document.fullscreenEnabled);
+
+const SWIPE_THRESHOLD = 50;
 
 export interface GalleryImage {
   src: string;
@@ -59,6 +66,15 @@ const DashboardGallery = ({
     }
   }, []);
 
+  const handleDragEnd = useCallback(
+    (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      if (isZoomed) return;
+      if (info.offset.x > SWIPE_THRESHOLD) handlePrevious();
+      else if (info.offset.x < -SWIPE_THRESHOLD) handleNext();
+    },
+    [isZoomed, handlePrevious, handleNext]
+  );
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -112,15 +128,17 @@ const DashboardGallery = ({
               {isZoomed ? <ZoomOut className="w-5 h-5" /> : <ZoomIn className="w-5 h-5" />}
             </motion.button>
             
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleFullscreen}
-              className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
-              aria-label="Toggle fullscreen"
-            >
-              <Maximize2 className="w-5 h-5" />
-            </motion.button>
+            {FULLSCREEN_SUPPORTED && (
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={toggleFullscreen}
+                className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
+                aria-label="Toggle fullscreen"
+              >
+                <Maximize2 className="w-5 h-5" />
+              </motion.button>
+            )}
 
             {pdfUrl && (
               <motion.a
@@ -162,10 +180,15 @@ const DashboardGallery = ({
                 isZoomed ? "cursor-zoom-out overflow-auto" : "cursor-zoom-in"
               }`}
               onClick={toggleZoom}
+              drag={!isZoomed && images.length > 1 ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.2}
+              onDragEnd={handleDragEnd}
             >
               <img
                 src={currentImage.src}
                 alt={currentImage.caption}
+                decoding="async"
                 className={`max-h-full transition-transform duration-300 ${
                   isZoomed
                     ? "max-w-none scale-150"
@@ -221,33 +244,56 @@ const DashboardGallery = ({
           </p>
           
           {images.length > 1 && (
-            <div className="flex justify-center gap-1.5 sm:gap-2">
-              {images.map((image, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setCurrentIndex(index);
-                    setIsZoomed(false);
-                  }}
-                  className={`w-12 h-8 sm:w-16 sm:h-10 rounded-md overflow-hidden border-2 transition-all ${
-                    index === currentIndex
-                      ? "border-white opacity-100"
-                      : "border-transparent opacity-50 hover:opacity-80"
-                  }`}
-                >
-                  <img
-                    src={image.src}
-                    alt={`Thumbnail ${index + 1}`}
-                    width={64}
-                    height={40}
-                    className="w-full h-full object-cover"
-                    draggable={false}
+            <>
+              {/* Mobile (< sm): swipe to navigate, dot indicators in place of thumbnails */}
+              <div className="flex sm:hidden justify-center gap-1.5">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCurrentIndex(index);
+                      setIsZoomed(false);
+                    }}
+                    aria-label={`Go to image ${index + 1}`}
+                    className={`h-1.5 rounded-full transition-all ${
+                      index === currentIndex
+                        ? "w-6 bg-white"
+                        : "w-1.5 bg-white/40"
+                    }`}
                   />
-                </motion.button>
-              ))}
-            </div>
+                ))}
+              </div>
+
+              {/* Desktop/tablet: thumbnail strip */}
+              <div className="hidden sm:flex justify-center gap-2">
+                {images.map((image, index) => (
+                  <motion.button
+                    key={index}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setCurrentIndex(index);
+                      setIsZoomed(false);
+                    }}
+                    className={`w-16 h-10 rounded-md overflow-hidden border-2 transition-all ${
+                      index === currentIndex
+                        ? "border-white opacity-100"
+                        : "border-transparent opacity-50 hover:opacity-80"
+                    }`}
+                  >
+                    <img
+                      src={image.src}
+                      alt={`Thumbnail ${index + 1}`}
+                      width={64}
+                      height={40}
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                      draggable={false}
+                    />
+                  </motion.button>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </DialogContent>

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Database, BarChart3, Wrench, Users, FileText } from "lucide-react";
+import { Database, BarChart3, Wrench, Users, FileText, Calculator } from "lucide-react";
 import { springs } from "@/lib/springs";
 import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
@@ -95,6 +95,24 @@ const skillCategories: SkillCategory[] = [
     gradient: "from-emerald-500 to-teal-500",
     span: "md:col-span-1",
     type: "bars",
+  },
+  {
+    icon: Calculator,
+    title: "Finance & Accounting",
+    skills: [
+      { name: "GAAP" },
+      { name: "IFRS" },
+      { name: "ASPE" },
+      { name: "Accounts Payable/Receivable" },
+      { name: "Tax Compliance" },
+      { name: "Reconciliation" },
+      { name: "Financial Reporting" },
+      { name: "QuickBooks Online (ProAdvisor Certified)" },
+      { name: "SAP" },
+    ],
+    gradient: "from-green-600 to-emerald-700",
+    span: "md:col-span-3",
+    type: "badges",
   },
   {
     icon: Users,
@@ -223,7 +241,7 @@ const SkillsSection = () => {
                           initial={{ scaleX: 0 }}
                           whileInView={{ scaleX: 1 }}
                           viewport={{ once: true }}
-                          transition={{ delay: i * 0.06, ...springs.standard }}
+                          transition={{ delay: Math.min(i, 8) * 0.06, ...springs.standard }}
                         />
                       </div>
                     </motion.div>

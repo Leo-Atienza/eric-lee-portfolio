@@ -1,9 +1,15 @@
-import { useRef, useCallback, useEffect, useState } from "react";
+import { useRef, useCallback, useState } from "react";
 import { useMotionValue, useSpring, useTransform } from "framer-motion";
 
 export function useTiltCard(maxTilt = 8) {
   const ref = useRef<HTMLDivElement>(null);
-  const [hasHover, setHasHover] = useState(false);
+  // Synchronous lazy init so hasHover is correct on first render — prevents
+  // remount of children if the caller does an early-return on touch devices.
+  const [hasHover] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches
+  );
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
 
@@ -15,10 +21,6 @@ export function useTiltCard(maxTilt = 8) {
     useTransform(rawX, [-0.5, 0.5], [-maxTilt, maxTilt]),
     { stiffness: 300, damping: 30 }
   );
-
-  useEffect(() => {
-    setHasHover(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
-  }, []);
 
   const onMouseMove = useCallback(
     (e: React.MouseEvent) => {
@@ -37,5 +39,5 @@ export function useTiltCard(maxTilt = 8) {
     rawY.set(0);
   }, [rawX, rawY]);
 
-  return { ref, rotateX, rotateY, onMouseMove, onMouseLeave };
+  return { ref, rotateX, rotateY, onMouseMove, onMouseLeave, hasHover };
 }

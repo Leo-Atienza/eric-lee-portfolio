@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import Lenis from "lenis";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -22,7 +23,13 @@ const Index = () => {
       lerp: 0.08,
       touchMultiplier: 1.5,
       smoothWheel: true,
+      syncTouch: true,
+      syncTouchLerp: 0.075,
     });
+
+    // Keep GSAP ScrollTrigger in sync with Lenis's virtual scroll so scrub
+    // animations (hero parallax, experience timeline) stay glued on touch.
+    lenis.on("scroll", ScrollTrigger.update);
 
     let rafId: number;
     function raf(time: number) {
@@ -32,10 +39,10 @@ const Index = () => {
     rafId = requestAnimationFrame(raf);
 
     const handleScrollTop = () => lenis.scrollTo(0);
-    window.addEventListener('lenis:scrollTop', handleScrollTop);
+    window.addEventListener("lenis:scrollTop", handleScrollTop);
 
     return () => {
-      window.removeEventListener('lenis:scrollTop', handleScrollTop);
+      window.removeEventListener("lenis:scrollTop", handleScrollTop);
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
@@ -47,21 +54,35 @@ const Index = () => {
       <BackToTopFAB />
       <Navigation />
       <HeroSection />
+      <SectionDivider />
       <Suspense fallback={<SectionSkeleton />}>
-        <SectionDivider />
         <AboutSection />
-        <SectionDivider />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<SectionSkeleton />}>
         <StatsSection />
-        <SectionDivider />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<SectionSkeleton />}>
         <SkillsSection />
-        <SectionDivider />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<SectionSkeleton />}>
         <ExperienceSection />
-        <SectionDivider />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<SectionSkeleton />}>
         <ProjectsSection />
-        <SectionDivider />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<SectionSkeleton />}>
         <CertificationsSection />
-        <SectionDivider />
+      </Suspense>
+      <SectionDivider />
+      <Suspense fallback={<SectionSkeleton />}>
         <ContactSection />
+      </Suspense>
+      <Suspense fallback={null}>
         <Footer />
       </Suspense>
     </div>

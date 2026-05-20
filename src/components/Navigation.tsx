@@ -54,6 +54,11 @@ const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ ...springs.gentle, delay: 0.1 }}
+        style={{
+          paddingTop: "env(safe-area-inset-top)",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+        }}
         className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-700 ease-out ${
           isScrolled
             ? "bg-background/95 border-b border-border/30 shadow-lg"
@@ -144,7 +149,7 @@ const Navigation = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className="fixed inset-x-4 top-20 z-50 glass-card rounded-2xl border border-border/50 md:hidden overflow-hidden"
+              className="fixed inset-x-4 top-20 z-50 glass-card rounded-2xl border border-border/50 md:hidden overflow-y-auto overscroll-contain max-h-[calc(100dvh-6rem)]"
             >
               <div className="p-4 space-y-1">
                 {navItems.map((item, index) => (
@@ -155,7 +160,7 @@ const Navigation = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors duration-300 ${
+                    className={`block px-4 py-3.5 rounded-xl text-base font-medium transition-colors duration-300 ${
                       activeSection === item.href.substring(1)
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
@@ -172,7 +177,7 @@ const Navigation = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: navItems.length * 0.05 }}
-                  className="block px-4 py-3 rounded-xl text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors duration-300"
+                  className="block px-4 py-3.5 rounded-xl text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors duration-300"
                 >
                   Resume
                 </motion.a>
@@ -182,7 +187,7 @@ const Navigation = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: (navItems.length + 1) * 0.05 }}
-                    className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors duration-300"
+                    className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors duration-300"
                     aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
                   >
                     {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}

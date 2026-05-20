@@ -7,26 +7,26 @@ import gsap from "gsap";
 
 const experiences = [
   {
-    title: "Finance, Accounting, Tax Specialist",
+    title: "Finance, Accounting & Tax Specialist",
     company: "NeedList.org",
     location: "Toronto, ON",
     period: "June 2025 – August 2025",
     duration: "3 months",
     type: "Volunteer",
     achievements: [
-      "Improved tax reporting with Excel formulas and data validation, cutting calculation time by 50%",
-      "Reduced rework by preparing audit-ready documents and reconciliation evidence, cutting revisions by 30%",
+      "Built a multi-province tax credit calculator (BC, AB, ON) in Excel using XLOOKUP, VLOOKUP, IF, IFERROR — validated against 20 scenarios and cross-referenced with CRA",
+      "Co-filed T3010 charity tax return and standardized audit-ready reconciliation documentation, cutting revision cycles by 30%; presented methodology to CEO, managers, and developers",
       "Strengthened stakeholder support by standardizing tax documentation and evidence",
     ],
   },
   {
-    title: "HELIX Entrepreneur | SearGuard",
+    title: "Entrepreneur-in-Residence (HELIX Co-op)",
     company: "Seneca Polytechnic",
     location: "Toronto, ON",
     period: "May 2025 – August 2025",
     duration: "4 months",
     achievements: [
-      "Improved pricing and budgeting by benchmarking 12 competitors and building a forecast model in a 10-slide deck",
+      "Benchmarked 12 competitors (ChefWorks, Bragard, Tilit) and coordinated with 5 manufacturers and 3 suppliers across 10 prototypes to develop pricing strategy and a financial forecast model",
       "Reduced response time by building an intake workflow for 25 weekly requests, improving turnaround by 30%",
       "Increased delivery accountability by standardizing tracking and follow-ups, reducing missed items by 20%",
     ],
@@ -38,7 +38,7 @@ const experiences = [
     period: "August 2024 – April 2026",
     duration: "1 year 8 months",
     achievements: [
-      "Resolved customer issues on the same day by prioritizing high-volume requests, increasing same-day resolution by 20%",
+      "Resolved 30–40 customer inquiries per shift by prioritizing high-volume requests, increasing same-day resolution by 20%",
       "Documented cases in Excel and troubleshot issues before escalation, reducing repeat follow-ups by 25%",
       "Coordinated with supervisors to escalate complex cases with clear summaries, improving turnaround by 15%",
     ],

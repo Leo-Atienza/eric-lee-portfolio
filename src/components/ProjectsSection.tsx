@@ -78,7 +78,7 @@ const projects: ProjectData[] = [
     pdfUrl: "/assets/hospital-dashboard.pdf",
   },
   {
-    title: "Tesla Production Analysis",
+    title: "Tesla Production & Deliveries Analysis",
     subtitle: "10-Year Trends",
     period: "Nov 2025 – Dec 2025",
     gradient: "from-orange-500 via-amber-500 to-yellow-500",
@@ -132,7 +132,10 @@ const childFade = {
 };
 
 const TiltProjectCard = ({ children }: { children: React.ReactNode }) => {
-  const { ref, rotateX, rotateY, onMouseMove, onMouseLeave } = useTiltCard(6);
+  const { ref, rotateX, rotateY, onMouseMove, onMouseLeave, hasHover } = useTiltCard(6);
+  // Skip the motion wrapper entirely on touch — avoids creating a GPU stacking
+  // context (transformPerspective: 1000) for cards that will never tilt.
+  if (!hasHover) return <>{children}</>;
   return (
     <motion.div
       ref={ref}
@@ -251,6 +254,7 @@ const ProjectsSection = () => {
                           height={200}
                           className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500 img-blur-load"
                           loading="lazy"
+                          decoding="async"
                           onLoad={(e) => e.currentTarget.classList.add("loaded")}
                           onError={(e) => {
                             const target = e.currentTarget;

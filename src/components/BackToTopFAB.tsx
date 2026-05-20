@@ -30,7 +30,11 @@ const BackToTopFAB = () => {
       {visible && (
         <motion.button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 p-3 rounded-full glass-card text-muted-foreground hover:text-primary transition-colors duration-300"
+          className="fixed z-50 p-3 rounded-full glass-card text-muted-foreground hover:text-primary transition-colors duration-300"
+          style={{
+            bottom: "max(1.5rem, env(safe-area-inset-bottom))",
+            right: "max(1.5rem, env(safe-area-inset-right))",
+          }}
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.6 }}

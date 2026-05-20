@@ -27,15 +27,15 @@ const certifications = [
     gradient: "from-amber-500 to-orange-500",
   },
   {
-    title: "CompTIA A+ Core 1 and Core 2",
-    issuer: "CompTIA CertMaster Learn",
+    title: "CompTIA A+ Core 1 and Core 2 CertMaster Learn",
+    issuer: "CompTIA",
     period: "September 2025 – Present",
     status: "In Progress",
     gradient: "from-red-500 to-rose-500",
   },
   {
     title: "QBO ProAdvisor Certification",
-    issuer: "QuickBooks Online",
+    issuer: "Intuit",
     period: "March 2026 – October 2027",
     status: "Completed",
     gradient: "from-emerald-500 to-green-500",
@@ -63,6 +63,7 @@ const certifications = [
   },
   {
     title: "Start Writing Prompts Like a Pro",
+    issuer: "Google",
     period: "May 2026",
     status: "Completed",
     gradient: "from-fuchsia-500 to-violet-500",
