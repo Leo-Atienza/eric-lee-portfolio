@@ -19,16 +19,19 @@ const Footer = lazy(() => import("@/components/Footer"));
 
 const Index = () => {
   useEffect(() => {
+    // syncTouch is intentionally NOT enabled — it hijacks iOS's compositor-thread
+    // scroll and replaces it with a main-thread JS lerp (felt as severe touch lag
+    // on real iPhones, even though Chrome DevTools mobile emulation looks fine).
+    // Touch scrolling uses native iOS momentum; Lenis only smooths wheel input.
     const lenis = new Lenis({
       lerp: 0.08,
-      touchMultiplier: 1.5,
       smoothWheel: true,
-      syncTouch: true,
-      syncTouchLerp: 0.075,
     });
 
-    // Keep GSAP ScrollTrigger in sync with Lenis's virtual scroll so scrub
-    // animations (hero parallax, experience timeline) stay glued on touch.
+    // Keep GSAP ScrollTrigger in sync with Lenis's wheel-driven smoothed scroll
+    // on desktop. On touch this is a no-op (Lenis doesn't drive scroll); GSAP
+    // falls back to its own passive scroll listener — works the same as any
+    // GSAP+native-scroll site.
     lenis.on("scroll", ScrollTrigger.update);
 
     let rafId: number;
