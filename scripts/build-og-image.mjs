@@ -63,7 +63,7 @@ const ogSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" wi
   </g>
 
   <!-- Domain (bottom right) -->
-  <text x="1120" y="588" font-family="Inter, Segoe UI, system-ui, sans-serif" font-size="22" font-weight="700" fill="#60a5fa" text-anchor="end">ericlee.dev</text>
+  <text x="1120" y="588" font-family="Inter, Segoe UI, system-ui, sans-serif" font-size="18" font-weight="700" fill="#60a5fa" text-anchor="end">ericlee-portfolio.vercel.app</text>
 </svg>`;
 
 await sharp(Buffer.from(ogSvg))

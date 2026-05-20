@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://ericlee.dev/sitemap.xml
+Sitemap: https://ericlee-portfolio.vercel.app/sitemap.xml
