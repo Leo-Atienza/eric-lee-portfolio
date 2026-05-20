@@ -40,22 +40,34 @@ const AboutSection = () => {
   const textRef = useGSAPTextReveal();
   const coursework = [
     "Business Systems Analysis",
-    "Statistics",
-    "Project Management",
     "Database Management",
-    "Advanced Data Analytics",
     "Quantitative Analysis",
+    "Advanced Data Analytics",
+    "Statistics",
+    "Economics",
+    "Accounting",
+    "Finance",
+    "Project Management",
     "Risk Management",
     "Operations Management",
+    "Information Systems",
+    "IT Audit",
+    "Fraud Assessment",
+    "GAAP Principles",
+    "IFRS Standards",
+    "PHIPA, PIPEDA",
+    "FIPPA/MFIPPA",
+    "HIPAA",
   ];
 
   return (
     <section id="about" className="relative py-20 sm:py-32 overflow-hidden">
       {/* Background accent */}
       <div
+        aria-hidden="true"
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-30"
         style={{
-          background: 'radial-gradient(ellipse, hsl(217 91% 60% / 0.1) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, hsl(var(--primary) / 0.1) 0%, transparent 70%)',
           filter: 'blur(60px)',
         }}
       />
@@ -111,7 +123,7 @@ const AboutSection = () => {
 
             <p className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg">
               Graduating April 2026 with strengths in SQL, Python, Excel, Power BI, and Tableau.
-              Experienced in analyzing trends and building dashboards to surface key insights that
+              Analyzed trends and built Power BI and Tableau dashboards to surface insights that
               support business decisions. Seeking full-time roles in analytics or consulting focused
               on KPI reporting, data quality, and insight-driven recommendations.
             </p>

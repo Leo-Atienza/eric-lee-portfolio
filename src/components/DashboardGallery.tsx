@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, Download } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
@@ -15,6 +15,7 @@ interface DashboardGalleryProps {
   onClose: () => void;
   initialIndex?: number;
   projectTitle: string;
+  pdfUrl?: string;
 }
 
 const DashboardGallery = ({
@@ -23,6 +24,7 @@ const DashboardGallery = ({
   onClose,
   initialIndex = 0,
   projectTitle,
+  pdfUrl,
 }: DashboardGalleryProps) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -119,7 +121,22 @@ const DashboardGallery = ({
             >
               <Maximize2 className="w-5 h-5" />
             </motion.button>
-            
+
+            {pdfUrl && (
+              <motion.a
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                href={pdfUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors inline-flex"
+                aria-label="Download dashboard PDF"
+              >
+                <Download className="w-5 h-5" />
+              </motion.a>
+            )}
+
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}

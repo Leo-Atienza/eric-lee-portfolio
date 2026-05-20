@@ -4,9 +4,6 @@ import { CheckCircle2 } from "lucide-react";
 import { springs } from "@/lib/springs";
 import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const experiences = [
   {
@@ -29,7 +26,7 @@ const experiences = [
     period: "May 2025 – August 2025",
     duration: "4 months",
     achievements: [
-      "Improved pricing and budgeting by benchmarking 12 competitors and building a forecast model",
+      "Improved pricing and budgeting by benchmarking 12 competitors and building a forecast model in a 10-slide deck",
       "Reduced response time by building an intake workflow for 25 weekly requests, improving turnaround by 30%",
       "Increased delivery accountability by standardizing tracking and follow-ups, reducing missed items by 20%",
     ],
@@ -38,8 +35,8 @@ const experiences = [
     title: "Customer Service Representative",
     company: "Seneca Polytechnic",
     location: "Toronto, ON",
-    period: "August 2024 – Present",
-    duration: "1+ year",
+    period: "August 2024 – April 2026",
+    duration: "1 year 8 months",
     achievements: [
       "Resolved customer issues on the same day by prioritizing high-volume requests, increasing same-day resolution by 20%",
       "Documented cases in Excel and troubleshot issues before escalation, reducing repeat follow-ups by 25%",
@@ -112,9 +109,10 @@ const ExperienceSection = () => {
     <section id="experience" className="relative py-20 sm:py-32 overflow-hidden">
       {/* Background effect */}
       <div
+        aria-hidden="true"
         className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] opacity-20"
         style={{
-          background: 'radial-gradient(circle, hsl(260 80% 60% / 0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(var(--accent) / 0.15) 0%, transparent 70%)',
           filter: 'blur(60px)',
         }}
       />

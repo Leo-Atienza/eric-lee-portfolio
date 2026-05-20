@@ -4,9 +4,6 @@ import { ArrowDown, Mail, Linkedin, MapPin, Sparkles, TrendingUp, Database, BarC
 import { springs } from "@/lib/springs";
 import { useMagneticButton } from "@/hooks/useMagneticButton";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -49,9 +46,9 @@ const buttonVariants = {
 };
 
 const floatingStats = [
-  { icon: Database, label: "SQL", x: "8%", y: "20%", delay: 1.8 },
-  { icon: BarChart3, label: "Power BI", x: "85%", y: "25%", delay: 2.1 },
-  { icon: TrendingUp, label: "Python", x: "12%", y: "72%", delay: 2.4 },
+  { icon: Database, label: "SQL", x: "8%", y: "20%", delay: 1.0 },
+  { icon: BarChart3, label: "Power BI", x: "85%", y: "25%", delay: 1.2 },
+  { icon: TrendingUp, label: "Python", x: "12%", y: "72%", delay: 1.4 },
 ];
 
 const rotatingTitles = ["Data Analyst", "Business Intelligence", "Process Optimizer", "Dashboard Builder"];
@@ -139,43 +136,58 @@ const HeroSection = () => {
 
     const interval = setInterval(() => {
       setTitleIndex((prev) => (prev + 1) % rotatingTitles.length);
-    }, 3000);
+    }, 4500);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <section ref={containerRef} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Layered radial gradients */}
-      <div className="hero-radial-top absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(217_91%_60%/0.12),transparent_50%)]" />
-      <div className="hero-radial-br absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,hsl(260_80%_60%/0.08),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_left,hsl(280_70%_60%/0.05),transparent_40%)]" />
+      {/* Layered radial gradients (theme-aware via CSS vars) */}
+      <div
+        aria-hidden="true"
+        className="hero-radial-top absolute inset-0"
+        style={{ background: "radial-gradient(ellipse at top, hsl(var(--primary) / 0.12), transparent 50%)" }}
+      />
+      <div
+        aria-hidden="true"
+        className="hero-radial-br absolute inset-0"
+        style={{ background: "radial-gradient(ellipse at bottom right, hsl(var(--accent) / 0.08), transparent 50%)" }}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{ background: "radial-gradient(ellipse at left, hsl(var(--accent) / 0.05), transparent 40%)" }}
+      />
 
       {/* Cursor-reactive orbs */}
       <motion.div
+        aria-hidden="true"
         className="hidden sm:block absolute w-[500px] h-[500px] rounded-full opacity-25"
         style={{
           x: orbX1,
           y: orbY1,
           top: '15%',
           left: '15%',
-          background: 'radial-gradient(circle, hsl(217 91% 60% / 0.18) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(var(--primary) / 0.18) 0%, transparent 70%)',
           filter: 'blur(50px)',
         }}
       />
       <motion.div
+        aria-hidden="true"
         className="hidden sm:block absolute w-[400px] h-[400px] rounded-full opacity-20"
         style={{
           x: orbX2,
           y: orbY2,
           bottom: '15%',
           right: '15%',
-          background: 'radial-gradient(circle, hsl(260 80% 60% / 0.22) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(var(--accent) / 0.22) 0%, transparent 70%)',
           filter: 'blur(45px)',
         }}
       />
 
       {/* Dot grid pattern */}
       <div
+        aria-hidden="true"
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px)`,
@@ -183,10 +195,11 @@ const HeroSection = () => {
         }}
       />
 
-      {/* Floating stat pills — desktop only */}
+      {/* Floating stat pills — desktop only (decorative) */}
       {floatingStats.map((stat, i) => (
         <motion.div
           key={stat.label}
+          aria-hidden="true"
           className="hidden lg:flex stat-pill absolute"
           style={{ left: stat.x, top: stat.y }}
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -329,7 +342,7 @@ const HeroSection = () => {
           variants={{
             hidden: {},
             visible: {
-              transition: { staggerChildren: 0.15, delayChildren: 1 }
+              transition: { staggerChildren: 0.15, delayChildren: 0.5 }
             }
           }}
         >
@@ -371,7 +384,7 @@ const HeroSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, ...springs.gentle }}
+          transition={{ delay: 0.8, ...springs.gentle }}
         >
           <a href="#about" className="inline-flex flex-col items-center gap-3 text-muted-foreground/60 hover:text-primary transition-colors duration-700 group">
             <span className="text-sm font-medium tracking-wide">Scroll to explore</span>

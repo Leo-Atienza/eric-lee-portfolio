@@ -32,7 +32,7 @@ const ContactSection = () => {
       isLink: true,
     },
     {
-      href: "tel:6472178158",
+      href: "tel:+16472178158",
       icon: Phone,
       label: "Phone",
       value: "(647) 217-8158",
@@ -57,11 +57,12 @@ const ContactSection = () => {
   return (
     <section id="contact" className="relative py-20 sm:py-32 overflow-hidden">
       {/* Background CTA gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" />
+      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" />
       <div
+        aria-hidden="true"
         className="absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse at center bottom, hsl(217 91% 60% / 0.1), transparent 60%)'
+          background: 'radial-gradient(ellipse at center bottom, hsl(var(--primary) / 0.1), transparent 60%)'
         }}
       />
 

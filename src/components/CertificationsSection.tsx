@@ -61,6 +61,12 @@ const certifications = [
     status: "Completed",
     gradient: "from-purple-500 to-pink-500",
   },
+  {
+    title: "Start Writing Prompts Like a Pro",
+    period: "May 2026",
+    status: "Completed",
+    gradient: "from-fuchsia-500 to-violet-500",
+  },
 ];
 
 const containerVariants = {
@@ -88,9 +94,11 @@ const CertificationsSection = () => {
   return (
     <section id="certifications" className="relative py-20 sm:py-32 overflow-hidden">
       {/* Background effect */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-20"
+      <div
+        aria-hidden="true"
+        className="absolute left-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-20"
         style={{
-          background: 'radial-gradient(circle, hsl(217 91% 60% / 0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
           filter: 'blur(60px)',
         }}
       />
@@ -149,7 +157,9 @@ const CertificationsSection = () => {
 
                 {/* Title + Issuer */}
                 <h4 className="font-bold text-lg sm:text-xl mb-2 leading-tight">{cert.title}</h4>
-                <p className="text-primary font-semibold text-sm sm:text-base mb-1">{cert.issuer}</p>
+                {cert.issuer && (
+                  <p className="text-primary font-semibold text-sm sm:text-base mb-1">{cert.issuer}</p>
+                )}
                 {cert.location && (
                   <p className="text-sm text-muted-foreground mb-1">{cert.location}</p>
                 )}

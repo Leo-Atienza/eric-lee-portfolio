@@ -5,7 +5,7 @@ import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
 
 interface Skill {
   name: string;
-  proficiency: number;
+  proficiency?: number;
 }
 
 interface SkillCategory {
@@ -25,9 +25,13 @@ const skillCategories: SkillCategory[] = [
       { name: "SQL Querying", proficiency: 95 },
       { name: "Data Cleaning", proficiency: 90 },
       { name: "Data Validation", proficiency: 90 },
-      { name: "KPI Tracking", proficiency: 85 },
+      { name: "Key Performance Indicators", proficiency: 88 },
       { name: "Trend Analysis", proficiency: 85 },
+      { name: "Insight Generation", proficiency: 85 },
+      { name: "Data Quality Checks", proficiency: 85 },
+      { name: "Dashboard Planning", proficiency: 82 },
       { name: "ETL Process", proficiency: 80 },
+      { name: "Data Standardization", proficiency: 80 },
       { name: "Data Profiling", proficiency: 75 },
     ],
     gradient: "from-blue-500 to-cyan-500",
@@ -39,11 +43,15 @@ const skillCategories: SkillCategory[] = [
     title: "Business Analysis",
     skills: [
       { name: "Requirements Gathering", proficiency: 90 },
-      { name: "Process Mapping", proficiency: 88 },
+      { name: "Business Process Mapping", proficiency: 88 },
+      { name: "Stakeholder Management", proficiency: 88 },
+      { name: "Process Improvement", proficiency: 85 },
       { name: "User Stories", proficiency: 85 },
+      { name: "Acceptance Criteria", proficiency: 82 },
       { name: "Gap Analysis", proficiency: 82 },
+      { name: "Impact Analysis", proficiency: 80 },
       { name: "Workflow Optimization", proficiency: 80 },
-      { name: "Agile", proficiency: 78 },
+      { name: "Agile Principles", proficiency: 78 },
     ],
     gradient: "from-purple-500 to-pink-500",
     span: "md:col-span-1",
@@ -56,15 +64,20 @@ const skillCategories: SkillCategory[] = [
       { name: "SQL", proficiency: 95 },
       { name: "Excel", proficiency: 92 },
       { name: "Power BI", proficiency: 90 },
+      { name: "Microsoft Office", proficiency: 90 },
       { name: "Python", proficiency: 85 },
+      { name: "Generative AI", proficiency: 85 },
+      { name: "Prompt Engineering", proficiency: 85 },
       { name: "Tableau", proficiency: 82 },
-      { name: "VBA", proficiency: 75 },
       { name: "Power Query", proficiency: 80 },
       { name: "Jira", proficiency: 78 },
+      { name: "Scrum", proficiency: 78 },
       { name: "Confluence", proficiency: 75 },
+      { name: "SharePoint", proficiency: 75 },
+      { name: "VBA", proficiency: 75 },
     ],
     gradient: "from-orange-500 to-amber-500",
-    span: "md:col-span-1",
+    span: "md:col-span-1 md:row-span-2",
     type: "bars",
   },
   {
@@ -74,7 +87,9 @@ const skillCategories: SkillCategory[] = [
       { name: "Data Visualization", proficiency: 92 },
       { name: "Interactive Dashboards", proficiency: 90 },
       { name: "KPI Tracking", proficiency: 88 },
+      { name: "Management Reporting", proficiency: 85 },
       { name: "Executive Summaries", proficiency: 82 },
+      { name: "Ad Hoc Reporting", proficiency: 80 },
       { name: "Storytelling", proficiency: 80 },
     ],
     gradient: "from-emerald-500 to-teal-500",
@@ -85,14 +100,20 @@ const skillCategories: SkillCategory[] = [
     icon: Users,
     title: "Soft Skills",
     skills: [
-      { name: "Analytical Thinking", proficiency: 0 },
-      { name: "Problem Solving", proficiency: 0 },
-      { name: "Communication", proficiency: 0 },
-      { name: "Stakeholder Management", proficiency: 0 },
-      { name: "Collaboration", proficiency: 0 },
+      { name: "Analytical Thinking" },
+      { name: "Problem Solving" },
+      { name: "Written and Verbal Communication" },
+      { name: "Attention to Detail" },
+      { name: "Decision Making" },
+      { name: "Cross-Functional Communication" },
+      { name: "Collaboration" },
+      { name: "Time Management" },
+      { name: "Adaptability" },
+      { name: "Stakeholder Presentation" },
+      { name: "Prioritization" },
     ],
     gradient: "from-rose-500 to-red-500",
-    span: "md:col-span-1",
+    span: "md:col-span-3",
     type: "badges",
   },
 ];
@@ -135,9 +156,10 @@ const SkillsSection = () => {
   return (
     <section id="skills" className="relative py-20 sm:py-32 bg-gradient-to-b from-secondary/30 to-transparent">
       <div
+        aria-hidden="true"
         className="absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse at center, hsl(217 91% 60% / 0.05), transparent 70%)'
+          background: 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.05), transparent 70%)'
         }}
       />
 

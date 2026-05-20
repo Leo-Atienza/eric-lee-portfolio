@@ -16,7 +16,7 @@ const stats: StatItem[] = [
   { value: 4, suffix: "+", label: "Projects Completed", icon: FolderKanban },
   { value: 300000, suffix: "+", label: "Data Records Analyzed", icon: Database },
   { value: 15.4, prefix: "$", suffix: "M+", label: "Savings Identified", icon: TrendingUp, decimals: 1 },
-  { value: 8, label: "Certifications", icon: Award },
+  { value: 9, label: "Certifications", icon: Award },
 ];
 
 const formatNumber = (val: number, decimals = 0): string => {
@@ -77,9 +77,10 @@ const StatsSection = () => {
   return (
     <section className="relative py-16 sm:py-24 overflow-hidden">
       <div
+        aria-hidden="true"
         className="absolute inset-0"
         style={{
-          background: "radial-gradient(ellipse at center, hsl(217 91% 60% / 0.06), transparent 70%)",
+          background: "radial-gradient(ellipse at center, hsl(var(--primary) / 0.06), transparent 70%)",
         }}
       />
 

@@ -16,6 +16,7 @@ interface ProjectData {
   highlights: { metric: string; label: string }[];
   description: string;
   tools: string[];
+  pdfUrl?: string;
 }
 
 const projects: ProjectData[] = [
@@ -36,6 +37,7 @@ const projects: ProjectData[] = [
     ],
     description: "Extracted and validated utility records using SQL queries and Excel reconciliation. Developed Power BI KPI dashboards quantifying savings across building types.",
     tools: ["SQL", "Excel", "Power BI"],
+    pdfUrl: "/assets/yees-dashboard.pdf",
   },
   {
     title: "Credit Risk Analysis",
@@ -54,6 +56,7 @@ const projects: ProjectData[] = [
     ],
     description: "Engineered Python data preparation for loan default datasets. Validated risk patterns across debt-to-income bands and visualized in Tableau.",
     tools: ["Python", "Tableau", "Data Analysis"],
+    pdfUrl: "/assets/loan-dashboard.pdf",
   },
   {
     title: "Hospital Length of Stay",
@@ -72,6 +75,7 @@ const projects: ProjectData[] = [
     ],
     description: "Analyzed length of stay drivers and modelled cohort comparisons across age groups. Visualized KPIs in Power BI with interactive filters.",
     tools: ["SQL", "Power BI", "Data Validation"],
+    pdfUrl: "/assets/hospital-dashboard.pdf",
   },
   {
     title: "Tesla Production Analysis",
@@ -90,6 +94,7 @@ const projects: ProjectData[] = [
     ],
     description: "Engineered 2015-2024 production dataset in Excel. Visualized long-term trends in Tableau and developed management-ready presentations.",
     tools: ["Excel", "Tableau", "PowerPoint"],
+    pdfUrl: "/assets/tesla-dashboard.pdf",
   },
 ];
 
@@ -161,9 +166,10 @@ const ProjectsSection = () => {
     <TooltipProvider delayDuration={200}>
       <section id="projects" className="relative py-20 sm:py-32 bg-gradient-to-b from-transparent via-secondary/30 to-transparent">
         <div
+          aria-hidden="true"
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at top, hsl(260 80% 60% / 0.05), transparent 60%)'
+            background: 'radial-gradient(ellipse at top, hsl(var(--accent) / 0.05), transparent 60%)'
           }}
         />
 
@@ -320,6 +326,7 @@ const ProjectsSection = () => {
             onClose={closeGallery}
             initialIndex={initialImageIndex}
             projectTitle={activeProject.title}
+            pdfUrl={activeProject.pdfUrl}
           />
         )}
       </section>

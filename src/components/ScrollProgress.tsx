@@ -15,6 +15,10 @@ const ScrollProgress = () => {
   if (supportsScrollTimeline) {
     return (
       <div
+        role="progressbar"
+        aria-label="Reading progress"
+        aria-valuemin={0}
+        aria-valuemax={100}
         className="scroll-progress scroll-progress-css"
         style={{ transform: "scaleX(0)" }}
       />
@@ -23,6 +27,10 @@ const ScrollProgress = () => {
 
   return (
     <motion.div
+      role="progressbar"
+      aria-label="Reading progress"
+      aria-valuemin={0}
+      aria-valuemax={100}
       className="scroll-progress"
       style={{ scaleX }}
     />
