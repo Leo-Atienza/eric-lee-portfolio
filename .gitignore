@@ -24,3 +24,11 @@ TRASH/
 *.sln
 *.sw?
 .vercel
+
+# SSR build used only by scripts/prerender.mjs
+dist-ssr
+
+# gate artefacts
+_shots
+_xb
+lh.json

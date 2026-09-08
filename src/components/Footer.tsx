@@ -1,38 +1,16 @@
-import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
-import { springs } from "@/lib/springs";
-
-const Footer = () => {
-  return (
-    <footer className="relative py-12 sm:py-16 border-t border-border/50">
-      <div className="max-w-6xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={springs.standard}
-          className="flex flex-col md:flex-row items-center justify-between gap-6"
-        >
-          <div className="flex flex-col items-center md:items-start gap-2">
-            <p className="text-lg font-bold">
-              Eric <span className="gradient-text">Lee</span>
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Data Analytics & Business Intelligence
-            </p>
-          </div>
-
-          <p className="text-sm text-muted-foreground inline-flex items-center gap-2">
-            Built with <Heart className="w-4 h-4 text-rose-500 fill-rose-500" /> for data & analytics
-          </p>
-
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()}
-          </p>
-        </motion.div>
-      </div>
-    </footer>
-  );
-};
+/* Ft2, one line under a hairline. */
+const Footer = () => (
+  <footer className="page pb-12">
+    <hr className="rule" />
+    <div className="small muted flex flex-wrap items-center justify-between gap-x-8 gap-y-2 pt-6">
+      <p>
+        Eric Lee, Markham, Ontario. <span className="num">&copy; {new Date().getFullYear()}</span>
+      </p>
+      <a href="#top" className="quiet-link inline-flex min-h-[44px] items-center">
+        Back to top <span aria-hidden="true">&nbsp;&uarr;</span>
+      </a>
+    </div>
+  </footer>
+);
 
 export default Footer;

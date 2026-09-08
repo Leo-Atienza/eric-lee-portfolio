@@ -1,0 +1,35 @@
+{
+  "_how": "Every ink-on-ground pair the site ships, [ink, ground, min]; both schemes are checked because the tokens use light-dark(). Run: npm run check:contrast",
+  "css": ["src/index.css"],
+  "palette": {
+    "ground": "--color-ground",
+    "ground-raised": "--color-ground-raised",
+    "ground-sunken": "--color-ground-sunken",
+    "ink": "--color-ink",
+    "ink-muted": "--color-ink-muted",
+    "rule-strong": "--color-rule-strong",
+    "accent": "--color-accent",
+    "accent-strong": "--color-accent-strong",
+    "overlay-ink": "--color-overlay-ink",
+    "overlay-solid": "oklch(0.17 0.02 160)"
+  },
+  "pairs": [
+    ["ink", "ground", 4.5],
+    ["ink", "ground-raised", 4.5],
+    ["ink", "ground-sunken", 4.5],
+    ["ink-muted", "ground", 4.5],
+    ["ink-muted", "ground-raised", 4.5],
+    ["ink-muted", "ground-sunken", 4.5],
+    ["accent", "ground", 4.5],
+    ["accent", "ground-raised", 4.5],
+    ["accent", "ground-sunken", 4.5],
+    ["accent-strong", "ground", 4.5],
+    ["accent-strong", "ground-raised", 4.5],
+    ["rule-strong", "ground", 3],
+    ["overlay-ink", "overlay-solid", 4.5]
+  ],
+  "banned": [
+    ["ink-muted", "accent"],
+    ["accent", "ink"]
+  ]
+}

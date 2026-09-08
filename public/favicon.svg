@@ -1,4 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="80" fill="#000000"/>
-  <text x="256" y="360" font-family="Plus Jakarta Sans, Inter, sans-serif" font-size="280" font-weight="700" text-anchor="middle" fill="#ffffff">EL</text>
+  <style>
+    .bg { fill: #f4f8f5; }
+    .ink { fill: #101b15; }
+    .ring { fill: none; stroke: #101b15; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0e1612; }
+      .ink { fill: #e4e9e5; }
+      .ring { stroke: #e4e9e5; }
+    }
+  </style>
+  <rect class="bg" width="512" height="512"/>
+  <circle class="ring" cx="256" cy="256" r="230" stroke-width="12"/>
+  <circle class="ring" cx="256" cy="256" r="198" stroke-width="8"/>
+  <text class="ink" x="256" y="322" font-family="Libre Caslon Display, Georgia, 'Times New Roman', serif" font-size="196" text-anchor="middle" letter-spacing="6">EL</text>
 </svg>

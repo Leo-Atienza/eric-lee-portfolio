@@ -1,0 +1,47 @@
+[
+  {
+    "ts": "2026-09-08T04:34:23.877Z",
+    "project": "your-portfolio-builder",
+    "scope": "page",
+    "archetype": "editorial long-form (ledger)",
+    "component": null,
+    "genre": "editorial",
+    "register": "brand",
+    "paletteFamily": "ledger-green",
+    "displayFont": "Libre Caslon Display",
+    "bodyFont": "Public Sans",
+    "parts": [
+      "H2",
+      "N1b",
+      "S2",
+      "F3",
+      "F4",
+      "T4",
+      "C3",
+      "Ft2"
+    ],
+    "dials": {
+      "E": 1,
+      "R": 2,
+      "M": 2
+    },
+    "critique": {
+      "P": 4,
+      "H": 4,
+      "E": 4,
+      "S": 4,
+      "R": 5,
+      "V": 4
+    },
+    "gates": {
+      "contrast": "pass",
+      "a11y": "pass",
+      "mobile": "pass",
+      "honest": "pass",
+      "perf": "pass"
+    },
+    "states": null,
+    "brief": "Ledger re-costume: finance register, Caslon + Public Sans, one green accent, prerendered",
+    "file": "src/index.css"
+  }
+]

@@ -1,340 +1,216 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { BarChart2, ExternalLink } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import DashboardGallery, { GalleryImage } from "./DashboardGallery";
-import { springs } from "@/lib/springs";
-import { useTiltCard } from "@/hooks/useTiltCard";
-import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
+import { Fragment, useRef, useState } from "react";
+import SectionHead from "@/components/SectionHead";
+import DashboardGallery, { type GalleryImage } from "@/components/DashboardGallery";
+import { useReveal } from "@/hooks/useReveal";
 
-interface ProjectData {
+interface Project {
   title: string;
   subtitle: string;
   period: string;
-  gradient: string;
-  gallery: GalleryImage[];
-  highlights: { metric: string; label: string }[];
   description: string;
-  tools: string[];
-  pdfUrl?: string;
+  figures: { value: string; label: string }[];
+  gallery: GalleryImage[];
+  pdfUrl: string;
 }
 
-const projects: ProjectData[] = [
+/* Every figure below appears in the résumé's project bullets. */
+const projects: Project[] = [
   {
     title: "YEES Energy Project",
-    subtitle: "Cost-Benefit Analysis",
-    period: "Nov 2023 – Jan 2024",
-    gradient: "from-emerald-500 via-teal-500 to-cyan-500",
+    subtitle: "Cost-benefit analysis",
+    period: "November 2023 to January 2024",
+    description:
+      "Validated utility records in SQL and Excel, then built Power BI dashboards quantifying savings by building type.",
+    figures: [
+      { value: "10,000+", label: "utility records validated" },
+      { value: "$15.4M", label: "potential savings identified" },
+      { value: "29 to 34%", label: "cost reduction potential" },
+    ],
     gallery: [
-      { src: "/assets/dashboards/yees_full.webp", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/yees_intensity_bar.webp", caption: "Electricity Intensity by Property Type" },
-      { src: "/assets/dashboards/yees_supporting.webp", caption: "Supporting View" },
+      { src: "/assets/dashboards/yees_full.webp", caption: "Full dashboard", width: 1660, height: 933 },
+      { src: "/assets/dashboards/yees_intensity_bar.webp", caption: "Electricity intensity by property type", width: 1776, height: 1057 },
+      { src: "/assets/dashboards/yees_supporting.webp", caption: "Supporting view", width: 1658, height: 934 },
     ],
-    highlights: [
-      { metric: "10,000+", label: "Utility records validated" },
-      { metric: "$15.4M", label: "Potential savings identified" },
-      { metric: "29-34%", label: "Cost reduction potential" },
-    ],
-    description: "Extracted and validated utility records using SQL queries and Excel reconciliation. Developed Power BI KPI dashboards quantifying savings across building types.",
-    tools: ["SQL", "Excel", "Power BI"],
     pdfUrl: "/assets/yees-dashboard.pdf",
   },
   {
     title: "Credit Risk Analysis",
-    subtitle: "Loan Default Prediction",
-    period: "Jan 2026 – Feb 2026",
-    gradient: "from-blue-500 via-indigo-500 to-violet-500",
+    subtitle: "Loan default prediction",
+    period: "January to February 2026",
+    description:
+      "Prepared a loan default dataset in Python and visualized risk segments in Tableau.",
+    figures: [
+      { value: "50%", label: "prep time cut" },
+      { value: "2x", label: "higher default rate found" },
+      { value: "35%", label: "faster interpretation" },
+    ],
     gallery: [
-      { src: "/assets/dashboards/credit_full.webp", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/credit_scatter_income_debt.webp", caption: "Income vs Debt Burden by Default" },
-      { src: "/assets/dashboards/credit_dti_distribution.webp", caption: "Debt-to-Income Distribution by Default" },
+      { src: "/assets/dashboards/credit_full.webp", caption: "Full dashboard", width: 1919, height: 1099 },
+      { src: "/assets/dashboards/credit_scatter_income_debt.webp", caption: "Income against debt burden by default", width: 1919, height: 1129 },
+      { src: "/assets/dashboards/credit_dti_distribution.webp", caption: "Debt-to-income distribution by default", width: 1919, height: 1119 },
     ],
-    highlights: [
-      { metric: "50%", label: "Prep time reduced" },
-      { metric: "2x", label: "Higher default rate identified" },
-      { metric: "35%", label: "Faster interpretation" },
-    ],
-    description: "Engineered Python data preparation for loan default datasets. Validated risk patterns across debt-to-income bands and visualized in Tableau.",
-    tools: ["Python", "Tableau", "Data Analysis"],
     pdfUrl: "/assets/loan-dashboard.pdf",
   },
   {
     title: "Hospital Length of Stay",
-    subtitle: "Healthcare Analytics",
-    period: "Jan 2026 – Feb 2026",
-    gradient: "from-purple-500 via-pink-500 to-rose-500",
+    subtitle: "Healthcare analytics",
+    period: "January to February 2026",
+    description:
+      "Validated hospital encounters in SQL and analyzed length-of-stay drivers in Power BI.",
+    figures: [
+      { value: "300,000+", label: "hospital encounters analyzed" },
+      { value: "Top 3", label: "segments prioritized" },
+      { value: "40%", label: "faster drill-down" },
+    ],
     gallery: [
-      { src: "/assets/dashboards/hospital_full.webp", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/hospital_admission_type.webp", caption: "Admission Type vs Length of Stay" },
-      { src: "/assets/dashboards/hospital_los_distribution.webp", caption: "Length of Stay Distribution" },
+      { src: "/assets/dashboards/hospital_full.webp", caption: "Full dashboard", width: 1657, height: 930 },
+      { src: "/assets/dashboards/hospital_admission_type.webp", caption: "Admission type against length of stay", width: 1772, height: 1060 },
+      { src: "/assets/dashboards/hospital_los_distribution.webp", caption: "Length of stay distribution", width: 1771, height: 1060 },
     ],
-    highlights: [
-      { metric: "300,000+", label: "Hospital encounters analyzed" },
-      { metric: "Top 3", label: "Segments prioritized" },
-      { metric: "40%", label: "Faster drill-down" },
-    ],
-    description: "Analyzed length of stay drivers and modelled cohort comparisons across age groups. Visualized KPIs in Power BI with interactive filters.",
-    tools: ["SQL", "Power BI", "Data Validation"],
     pdfUrl: "/assets/hospital-dashboard.pdf",
   },
   {
     title: "Tesla Production & Deliveries Analysis",
-    subtitle: "10-Year Trends",
-    period: "Nov 2025 – Dec 2025",
-    gradient: "from-orange-500 via-amber-500 to-yellow-500",
+    subtitle: "Ten-year trends",
+    period: "November to December 2025",
+    description:
+      "Standardized ten years of production data in Excel and built Tableau KPI views.",
+    figures: [
+      { value: "10 years", label: "of data" },
+      { value: "30%", label: "less reporting time" },
+      { value: "25%", label: "fewer follow-up questions" },
+    ],
     gallery: [
-      { src: "/assets/dashboards/tesla_full.webp", caption: "Full Dashboard" },
-      { src: "/assets/dashboards/tesla_deliveries_trend.webp", caption: "Total Deliveries per Year" },
-      { src: "/assets/dashboards/tesla_revenue_per_model.webp", caption: "Revenue per Model" },
+      { src: "/assets/dashboards/tesla_full.webp", caption: "Full dashboard", width: 1919, height: 1134 },
+      { src: "/assets/dashboards/tesla_deliveries_trend.webp", caption: "Total deliveries per year", width: 1919, height: 1128 },
+      { src: "/assets/dashboards/tesla_revenue_per_model.webp", caption: "Revenue per model", width: 1916, height: 1127 },
     ],
-    highlights: [
-      { metric: "10 Years", label: "Data standardized" },
-      { metric: "30%", label: "Reporting time reduced" },
-      { metric: "25%", label: "Fewer follow-ups" },
-    ],
-    description: "Engineered 2015-2024 production dataset in Excel. Visualized long-term trends in Tableau and developed management-ready presentations.",
-    tools: ["Excel", "Tableau", "PowerPoint"],
     pdfUrl: "/assets/tesla-dashboard.pdf",
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.18,
-      delayChildren: 0.08,
-    },
-  },
-};
+type Opener = (event: React.MouseEvent<HTMLButtonElement>) => void;
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      ...springs.standard,
-      staggerChildren: 0.05,
-      delayChildren: 0.12,
-    },
-  },
-};
+interface CaptureProps {
+  image: GalleryImage;
+  onOpen: Opener;
+  sizes: string;
+}
 
-const childFade = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: springs.standard,
-  },
-};
+const Capture = ({ image, onOpen, sizes }: CaptureProps) => (
+  <button type="button" className="plate" onClick={onOpen} aria-label={`View ${image.caption.toLowerCase()} at full size`}>
+    <img src={image.src} alt="" width={image.width} height={image.height} loading="lazy" decoding="async" sizes={sizes} />
+  </button>
+);
 
-const TiltProjectCard = ({ children }: { children: React.ReactNode }) => {
-  const { ref, rotateX, rotateY, onMouseMove, onMouseLeave, hasHover } = useTiltCard(6);
-  // Skip the motion wrapper entirely on touch — avoids creating a GPU stacking
-  // context (transformPerspective: 1000) for cards that will never tilt.
-  if (!hasHover) return <>{children}</>;
-  return (
-    <motion.div
-      ref={ref}
-      style={{ rotateX, rotateY, transformPerspective: 1000 }}
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-    >
-      {children}
-    </motion.div>
-  );
-};
+interface ProjectTextProps {
+  project: Project;
+  onOpen: Opener;
+}
+
+const ProjectText = ({ project, onOpen }: ProjectTextProps) => (
+  <>
+    <h3>{project.title}</h3>
+    <p className="muted mt-1">
+      {project.subtitle}. <span className="num">{project.period}</span>
+    </p>
+    <p className="mt-5">{project.description}</p>
+    <p className="mt-5 flex flex-wrap gap-x-8 gap-y-2">
+      <button type="button" onClick={onOpen} className="link inline-flex min-h-[44px] items-center">
+        View dashboard
+      </button>
+      <a href={project.pdfUrl} download className="link inline-flex min-h-[44px] items-center">
+        PDF
+      </a>
+    </p>
+  </>
+);
+
+const ProjectFigures = ({ project }: { project: Project }) => (
+  <dl className="kv kv--open">
+    {project.figures.map(({ value, label }) => (
+      <Fragment key={label}>
+        <dt className="num !text-ink !font-medium !text-base !pt-3">{value}</dt>
+        <dd className="small muted !pt-[calc(var(--space-sm)+0.125em)]">{label}</dd>
+      </Fragment>
+    ))}
+  </dl>
+);
 
 const ProjectsSection = () => {
-  const textRef = useGSAPTextReveal();
-  const [galleryOpen, setGalleryOpen] = useState(false);
-  const [activeProject, setActiveProject] = useState<ProjectData | null>(null);
-  const [initialImageIndex, setInitialImageIndex] = useState(0);
+  const ref = useReveal<HTMLDivElement>();
+  const [open, setOpen] = useState<{ project: Project; index: number } | null>(null);
+  const opener = useRef<HTMLElement | null>(null);
 
-  const openGallery = (project: ProjectData, imageIndex = 0) => {
-    setActiveProject(project);
-    setInitialImageIndex(imageIndex);
-    setGalleryOpen(true);
+  // The lightbox opens from state, not a Dialog.Trigger, so the opener is remembered for focus return.
+  const show = (project: Project, index: number): Opener => (event) => {
+    opener.current = event.currentTarget;
+    setOpen({ project, index });
   };
-
-  const closeGallery = () => {
-    setGalleryOpen(false);
-    setActiveProject(null);
-  };
+  const hide = () => setOpen(null);
 
   return (
-    <TooltipProvider delayDuration={200}>
-      <section id="projects" className="relative py-20 sm:py-32 bg-gradient-to-b from-transparent via-secondary/30 to-transparent">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0"
-          style={{
-            background: 'radial-gradient(ellipse at top, hsl(var(--accent) / 0.05), transparent 60%)'
-          }}
-        />
+    <section id="projects" className="section">
+      <div ref={ref} className="page">
+        <SectionHead title="Projects" />
 
-        <div ref={textRef} className="section-container relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={springs.standard}
-            className="text-center mb-16"
-          >
-            <h2 className="section-label mb-4">Projects</h2>
-            <h3 className="section-title gsap-reveal">Featured Work</h3>
-          </motion.div>
-
-          <motion.div
-            className="grid md:grid-cols-2 gap-5 sm:gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            {projects.map((project) => (
-              <TiltProjectCard key={project.title}>
-                <motion.div
-                  variants={cardVariants}
-                  className="glass-card rounded-2xl sm:rounded-3xl overflow-hidden group h-full"
-                  whileHover={{ y: -4, transition: springs.standard }}
-                >
-                {/* Header with gradient */}
-                <div className={`p-4 sm:p-6 md:p-8 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
-
-                  <div className="relative z-10 flex items-start justify-between">
-                    <div className="flex-1 pr-4">
-                      <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1">{project.title}</h4>
-                      <p className="text-white/80 font-medium text-sm sm:text-base">{project.subtitle}</p>
+        <ol>
+          {projects.map((project, i) => (
+            <li key={project.title} className="reveal border-t border-rule py-10 lg:py-12" style={{ "--i": i + 2 } as React.CSSProperties}>
+              {i === 0 ? (
+                /* The one deliberate break in the rhythm: the strongest piece runs full width. */
+                <div className="grid gap-y-8">
+                  <Capture image={project.gallery[0]} onOpen={show(project, 0)} sizes="(min-width: 72rem) 66rem, 92vw" />
+                  <div className="grid gap-y-8 lg:grid-cols-12 lg:gap-x-16">
+                    <div className="lg:col-span-7">
+                      <ProjectText project={project} onOpen={show(project, 0)} />
                     </div>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <motion.button
-                          onClick={() => openGallery(project)}
-                          className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/15 text-white hover:bg-white/25 transition-colors"
-                          whileHover={{ scale: 1.08 }}
-                          whileTap={{ scale: 0.95 }}
-                          transition={springs.snappy}
-                        >
-                          <BarChart2 className="w-5 h-5 sm:w-7 sm:h-7" />
-                        </motion.button>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" className="text-xs">
-                        View Dashboard
-                      </TooltipContent>
-                    </Tooltip>
+                    <div className="lg:col-span-5">
+                      <ProjectFigures project={project} />
+                      <div className="mt-6 grid grid-cols-2 gap-4">
+                        {project.gallery.slice(1).map((image, j) => (
+                          <Capture key={image.src} image={image} onOpen={show(project, j + 1)} sizes="(min-width: 72rem) 13rem, 45vw" />
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <p className="relative z-10 text-white/70 text-xs sm:text-sm mt-3 sm:mt-4 font-medium">{project.period}</p>
                 </div>
-
-                {/* Content */}
-                <div className="p-4 sm:p-6 md:p-8">
-                  {/* Inline dashboard thumbnails */}
-                  <motion.div
-                    className="flex gap-2 mb-5 sm:mb-6 -mt-1"
-                    variants={childFade}
-                  >
-                    {project.gallery.slice(0, 3).map((img, i) => (
-                      <motion.button
-                        key={i}
-                        className="dashboard-thumb flex-1 aspect-[16/10] bg-secondary/50 overflow-hidden"
-                        onClick={() => openGallery(project, i)}
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={springs.snappy}
-                      >
-                        <img
-                          src={img.src}
-                          alt={img.caption}
-                          width={320}
-                          height={200}
-                          className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500 img-blur-load"
-                          loading="lazy"
-                          decoding="async"
-                          onLoad={(e) => e.currentTarget.classList.add("loaded")}
-                          onError={(e) => {
-                            const target = e.currentTarget;
-                            if (target.src.endsWith(".webp")) {
-                              target.src = target.src.replace(".webp", ".png");
-                            }
-                          }}
-                        />
-                      </motion.button>
-                    ))}
-                  </motion.div>
-
-                  {/* Metrics */}
-                  <motion.div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
-                    {project.highlights.map((highlight, i) => (
-                      <motion.div
-                        key={i}
-                        className="text-center"
-                        variants={childFade}
-                      >
-                        <p className="text-base sm:text-lg md:text-2xl font-bold gradient-text">{highlight.metric}</p>
-                        <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 leading-tight">{highlight.label}</p>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-
-                  <motion.p
-                    variants={childFade}
-                    className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base"
-                  >
-                    {project.description}
-                  </motion.p>
-
-                  {/* Tools + View button row */}
-                  <motion.div className="flex items-center justify-between gap-3" variants={childFade}>
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                      {project.tools.map((tool) => (
-                        <motion.span
-                          key={tool}
-                          className="skill-badge text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2"
-                          whileHover={{
-                            scale: 1.06,
-                            y: -1,
-                            transition: springs.snappy
-                          }}
-                        >
-                          {tool}
-                        </motion.span>
+              ) : (
+                <div className="grid gap-y-8 lg:grid-cols-12 lg:gap-x-16">
+                  <div className="lg:col-span-5">
+                    <ProjectText project={project} onOpen={show(project, 0)} />
+                    <div className="mt-8">
+                      <ProjectFigures project={project} />
+                    </div>
+                  </div>
+                  <div className="lg:col-span-7">
+                    <Capture image={project.gallery[0]} onOpen={show(project, 0)} sizes="(min-width: 72rem) 38rem, 92vw" />
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                      {project.gallery.slice(1).map((image, j) => (
+                        <Capture key={image.src} image={image} onOpen={show(project, j + 1)} sizes="(min-width: 72rem) 18rem, 45vw" />
                       ))}
                     </div>
-                    <motion.button
-                      onClick={() => openGallery(project)}
-                      className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs sm:text-sm text-primary font-medium hover:text-primary/80 transition-colors"
-                      whileHover={{ x: 3 }}
-                      transition={springs.snappy}
-                    >
-                      View
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </motion.button>
-                  </motion.div>
+                  </div>
                 </div>
-              </motion.div>
-              </TiltProjectCard>
-            ))}
-          </motion.div>
-        </div>
+              )}
+            </li>
+          ))}
+        </ol>
+        <hr className="rule-double reveal" style={{ "--i": 6 } as React.CSSProperties} />
+      </div>
 
-        {/* Gallery Modal */}
-        {activeProject && (
-          <DashboardGallery
-            images={activeProject.gallery}
-            isOpen={galleryOpen}
-            onClose={closeGallery}
-            initialIndex={initialImageIndex}
-            projectTitle={activeProject.title}
-            pdfUrl={activeProject.pdfUrl}
-          />
-        )}
-      </section>
-    </TooltipProvider>
+      {open && (
+        <DashboardGallery
+          images={open.project.gallery}
+          isOpen
+          onClose={hide}
+          returnFocusTo={opener.current}
+          initialIndex={open.index}
+          projectTitle={open.project.title}
+          pdfUrl={open.project.pdfUrl}
+        />
+      )}
+    </section>
   );
 };
 

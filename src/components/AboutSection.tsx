@@ -1,166 +1,64 @@
-import { motion } from "framer-motion";
-import { GraduationCap, Calendar, BookOpen, Sparkles } from "lucide-react";
-import { springs } from "@/lib/springs";
-import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
+import SectionHead from "@/components/SectionHead";
+import { useReveal } from "@/hooks/useReveal";
 
-const sectionVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.08,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      ...springs.standard,
-      staggerChildren: 0.04,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const childFade = {
-  hidden: { opacity: 0, y: 8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: springs.standard,
-  },
-};
+const coursework = [
+  "Business Systems Analysis",
+  "Database Management",
+  "Quantitative Analysis",
+  "Advanced Data Analytics",
+  "Statistics",
+  "Economics",
+  "Accounting",
+  "Finance",
+  "Project Management",
+  "Risk Management",
+  "Operations Management",
+  "Information Systems",
+  "IT Audit",
+  "Fraud Assessment",
+  "GAAP Principles",
+  "IFRS Standards",
+  "PHIPA, PIPEDA",
+  "FIPPA/MFIPPA",
+  "HIPAA",
+];
 
 const AboutSection = () => {
-  const textRef = useGSAPTextReveal();
-  const coursework = [
-    "Business Systems Analysis",
-    "Database Management",
-    "Quantitative Analysis",
-    "Advanced Data Analytics",
-    "Statistics",
-    "Economics",
-    "Accounting",
-    "Finance",
-    "Project Management",
-    "Risk Management",
-    "Operations Management",
-    "Information Systems",
-    "IT Audit",
-    "Fraud Assessment",
-    "GAAP Principles",
-    "IFRS Standards",
-    "PHIPA, PIPEDA",
-    "FIPPA/MFIPPA",
-    "HIPAA",
-  ];
+  const ref = useReveal<HTMLDivElement>();
 
   return (
-    <section id="about" className="relative py-20 sm:py-32 overflow-hidden">
-      {/* Background accent */}
-      <div
-        aria-hidden="true"
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-30"
-        style={{
-          background: 'radial-gradient(ellipse, hsl(var(--primary) / 0.1) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-        }}
-      />
+    <section id="about" className="section">
+      <div ref={ref} className="page">
+        <SectionHead title="Summary" />
 
-      <div ref={textRef} className="section-container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={springs.standard}
-          className="mb-16"
-        >
-          <h2 className="section-label mb-4">Summary</h2>
-          <h3 className="section-title gsap-reveal">Education & Background</h3>
-        </motion.div>
+        <div className="grid gap-y-12 lg:grid-cols-12 lg:gap-x-16">
+          <div className="lg:col-span-7">
+            <dl className="kv kv--stack reveal" style={{ "--i": 2 } as React.CSSProperties}>
+              <dt>Degree</dt>
+              <dd>Bachelor of Commerce (Honours), Business Technology Management</dd>
+              <dt>Institution</dt>
+              <dd>Seneca Polytechnic, Toronto, Ontario</dd>
+              <dt>Period</dt>
+              <dd className="num">September 2022 to April 2026</dd>
+            </dl>
 
-        <motion.div
-          className="grid lg:grid-cols-2 gap-5 sm:gap-8"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          <motion.div
-            variants={cardVariants}
-            className="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 group"
-            whileHover={{ y: -4, transition: springs.standard }}
-          >
-            <div className="flex items-start gap-3 sm:gap-5 mb-6 sm:mb-8">
-              <motion.div
-                className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/20 to-accent/10 text-primary"
-                whileHover={{ scale: 1.06 }}
-                transition={springs.bouncy}
-              >
-                <GraduationCap className="w-5 h-5 sm:w-7 sm:h-7" />
-              </motion.div>
-              <div>
-                <h4 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Bachelor of Commerce</h4>
-                <p className="text-primary font-semibold text-sm sm:text-lg">Business Technology Management (Honours)</p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
-              <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-primary/60" />
-                <span className="font-medium">Seneca Polytechnic</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary/60" />
-                <span>2022 – 2026</span>
-              </div>
-            </div>
-
-            <p className="text-muted-foreground leading-relaxed text-sm sm:text-base md:text-lg">
-              Graduating April 2026 with strengths in SQL, Python, Excel, Power BI, and Tableau.
-              Analyzed trends and built Power BI and Tableau dashboards to surface insights that
-              support business decisions. Seeking full-time roles in analytics or consulting focused
-              on KPI reporting, data quality, and insight-driven recommendations.
+            <p className="measure reveal mt-8" style={{ "--i": 3 } as React.CSSProperties}>
+              Graduated April 2026. Built Power BI and Tableau dashboards that support business decisions.
+              Seeking full-time roles in analytics or consulting.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            variants={cardVariants}
-            className="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 group"
-            whileHover={{ y: -4, transition: springs.standard }}
-          >
-            <div className="flex items-center gap-3 mb-6 sm:mb-8">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 45 }}
-                transition={springs.bouncy}
-              >
-                <Sparkles className="w-5 h-5 text-primary" />
-              </motion.div>
-              <h4 className="text-xl sm:text-2xl font-bold">Relevant Coursework</h4>
-            </div>
-            <motion.div className="flex flex-wrap gap-2 sm:gap-3">
+          <div className="lg:col-span-5">
+            <h3 className="label reveal mb-2" style={{ "--i": 3 } as React.CSSProperties}>
+              Coursework
+            </h3>
+            <ul className="course-list reveal" style={{ "--i": 4 } as React.CSSProperties}>
               {coursework.map((course) => (
-                <motion.span
-                  key={course}
-                  variants={childFade}
-                  className="skill-badge text-xs sm:text-sm md:text-base"
-                  whileHover={{
-                    scale: 1.05,
-                    y: -1,
-                    transition: springs.bouncy,
-                  }}
-                >
-                  {course}
-                </motion.span>
+                <li key={course}>{course}</li>
               ))}
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   );

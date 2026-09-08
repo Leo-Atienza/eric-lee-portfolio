@@ -2,39 +2,38 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Eric Lee | Data Analytics, Finance &amp; Reporting</title>
+    <meta name="description" content="Eric Lee, Business Technology Management graduate (Seneca Polytechnic, 2026): financial reporting, data analysis and KPI dashboards in SQL, Python, Excel, Power BI and Tableau." />
+    <script>document.documentElement.classList.add("js");</script>
+    <meta name="author" content="Eric Lee" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f8f5" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1612" />
+    <link rel="canonical" href="https://ericlee-portfolio.vercel.app/" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="alternate icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eric Lee | Data Analytics & Business Intelligence</title>
-    <meta name="description" content="Portfolio of Eric Lee - Business Technology Management student specializing in SQL, Python, Power BI, and Tableau. Seeking analytics and consulting roles." />
-    <meta name="author" content="Eric Lee" />
-    <link rel="canonical" href="https://ericlee-portfolio.vercel.app/" />
 
-    <meta property="og:title" content="Eric Lee | Data Analytics Portfolio" />
-    <meta property="og:description" content="Business Technology Management student with expertise in data analytics, SQL, Python, and business intelligence tools." />
+    <!-- Self-hosted faces: both render in the first screen, so both are preloaded. crossorigin is
+         mandatory even same-origin, fonts fetch in CORS mode and an anonymous preload is discarded. -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/libre-caslon-display-400.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/public-sans-400-600.woff2" crossorigin />
+
+    <meta property="og:title" content="Eric Lee | Data Analytics, Finance &amp; Reporting" />
+    <meta property="og:description" content="Business Technology Management graduate. Financial reporting, data analysis and KPI dashboards in SQL, Python, Excel, Power BI and Tableau." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ericlee-portfolio.vercel.app/" />
     <meta property="og:image" content="https://ericlee-portfolio.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@ericyflee" />
     <meta name="twitter:image" content="https://ericlee-portfolio.vercel.app/og-image.png" />
 
-    <!-- Font loading: preload as style for high-priority LCP fetch, swap to stylesheet on load -->
-    <link rel="preload" as="style"
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript>
-      <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
-    </noscript>
+    <!-- Plausible Analytics (privacy-friendly, no cookies) is appended after the load event by
+         scripts/prerender.mjs, so it never sits in front of the first paint. -->
 
-    <!-- Plausible Analytics (privacy-friendly, no cookies) -->
-    <script defer data-domain="ericlee-portfolio.vercel.app" src="https://plausible.io/js/script.js"></script>
-
-    <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -42,25 +41,30 @@
       "name": "Eric Yee Fa Lee",
       "alternateName": "Eric Lee",
       "url": "https://ericlee-portfolio.vercel.app",
-      "jobTitle": "Business Technology Management Student",
-      "description": "Data Analytics & Business Intelligence specialist with expertise in SQL, Python, Power BI, and Tableau.",
+      "image": "https://ericlee-portfolio.vercel.app/assets/eric-lee.jpg",
+      "jobTitle": "Business Technology Management graduate",
+      "description": "Financial reporting, data analysis and KPI dashboards supporting finance, accounting and operations decisions. SQL, Python, Excel, Power BI, Tableau.",
+      "email": "mailto:ericyeefalee@gmail.com",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Markham",
         "addressRegion": "ON",
         "addressCountry": "CA"
       },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Seneca Polytechnic"
+      },
       "sameAs": [
         "https://www.linkedin.com/in/eric-yf-lee/"
       ],
-      "knowsAbout": ["Data Analytics", "Business Intelligence", "SQL", "Python", "Power BI", "Tableau"]
+      "knowsAbout": ["Data Analytics", "Business Intelligence", "Financial Reporting", "SQL", "Python", "Excel", "Power BI", "Tableau"]
     }
     </script>
   </head>
 
   <body>
-    <!-- Skip to main content (accessibility) -->
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:text-sm focus:font-medium">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-ink focus:text-ground focus:text-sm focus:font-medium">
       Skip to main content
     </a>
     <div id="root"></div>

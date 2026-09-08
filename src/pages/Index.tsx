@@ -1,94 +1,75 @@
-import { lazy, Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import Lenis from "lenis";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import ScrollProgress from "@/components/ScrollProgress";
-import BackToTopFAB from "@/components/BackToTopFAB";
-import SectionDivider from "@/components/SectionDivider";
-import SectionSkeleton from "@/components/SectionSkeleton";
+import AboutSection from "@/components/AboutSection";
+import FiguresSection from "@/components/FiguresSection";
+import SkillsSection from "@/components/SkillsSection";
+import ExperienceSection from "@/components/ExperienceSection";
+import ProjectsSection from "@/components/ProjectsSection";
+import CertificationsSection from "@/components/CertificationsSection";
+import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 
-const AboutSection = lazy(() => import("@/components/AboutSection"));
-const StatsSection = lazy(() => import("@/components/StatsSection"));
-const SkillsSection = lazy(() => import("@/components/SkillsSection"));
-const ExperienceSection = lazy(() => import("@/components/ExperienceSection"));
-const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
-const CertificationsSection = lazy(() => import("@/components/CertificationsSection"));
-const ContactSection = lazy(() => import("@/components/ContactSection"));
-const Footer = lazy(() => import("@/components/Footer"));
+const ANCHOR_OFFSET = -80; // nav height + breathing room
 
+/**
+ * The whole page is one prerendered document (scripts/prerender.mjs): every section is in the
+ * HTML before any JavaScript runs, so the first paint never waits on a chunk.
+ */
 const Index = () => {
   useEffect(() => {
-    // syncTouch is intentionally NOT enabled — it hijacks iOS's compositor-thread
-    // scroll and replaces it with a main-thread JS lerp (felt as severe touch lag
-    // on real iPhones, even though Chrome DevTools mobile emulation looks fine).
-    // Touch scrolling uses native iOS momentum; Lenis only smooths wheel input.
-    const lenis = new Lenis({
-      lerp: 0.08,
-      smoothWheel: true,
-    });
+    // Reduced-motion readers keep native scrolling and instant anchor jumps.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // Keep GSAP ScrollTrigger in sync with Lenis's wheel-driven smoothed scroll
-    // on desktop. On touch this is a no-op (Lenis doesn't drive scroll); GSAP
-    // falls back to its own passive scroll listener — works the same as any
-    // GSAP+native-scroll site.
-    lenis.on("scroll", ScrollTrigger.update);
+    // syncTouch stays OFF: it replaces iOS's compositor-thread momentum scroll with a
+    // main-thread lerp (severe touch lag on real iPhones, invisible in DevTools emulation).
+    // Lenis smooths wheel input only; touch keeps native momentum.
+    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
 
-    let rafId: number;
-    function raf(time: number) {
+    let rafId = requestAnimationFrame(function raf(time) {
       lenis.raf(time);
       rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
+    });
 
-    const handleScrollTop = () => lenis.scrollTo(0);
-    window.addEventListener("lenis:scrollTop", handleScrollTop);
+    // In-page anchors hand focus to the target, then travel through Lenis,
+    // so keyboard readers land where the link said, the skip link included.
+    const onClick = (event: MouseEvent) => {
+      const anchor = (event.target as Element | null)?.closest?.('a[href^="#"]') as HTMLAnchorElement | null;
+      if (!anchor) return;
+      const id = decodeURIComponent(anchor.getAttribute("href")!.slice(1));
+      const target = id ? document.getElementById(id) : null;
+      if (!target) return;
+      event.preventDefault();
+      history.pushState(null, "", `#${id}`);
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+      lenis.scrollTo(target, { offset: ANCHOR_OFFSET });
+    };
+    document.addEventListener("click", onClick);
 
     return () => {
-      window.removeEventListener("lenis:scrollTop", handleScrollTop);
+      document.removeEventListener("click", onClick);
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);
 
   return (
-    <div id="main-content" className="min-h-screen bg-background">
-      <ScrollProgress />
-      <BackToTopFAB />
+    <>
       <Navigation />
-      <HeroSection />
-      <SectionDivider />
-      <Suspense fallback={<SectionSkeleton />}>
+      <main id="main-content">
+        <HeroSection />
         <AboutSection />
-      </Suspense>
-      <SectionDivider />
-      <Suspense fallback={<SectionSkeleton />}>
-        <StatsSection />
-      </Suspense>
-      <SectionDivider />
-      <Suspense fallback={<SectionSkeleton />}>
+        <FiguresSection />
         <SkillsSection />
-      </Suspense>
-      <SectionDivider />
-      <Suspense fallback={<SectionSkeleton />}>
         <ExperienceSection />
-      </Suspense>
-      <SectionDivider />
-      <Suspense fallback={<SectionSkeleton />}>
         <ProjectsSection />
-      </Suspense>
-      <SectionDivider />
-      <Suspense fallback={<SectionSkeleton />}>
         <CertificationsSection />
-      </Suspense>
-      <SectionDivider />
-      <Suspense fallback={<SectionSkeleton />}>
         <ContactSection />
-      </Suspense>
-      <Suspense fallback={null}>
-        <Footer />
-      </Suspense>
-    </div>
+      </main>
+      <Footer />
+    </>
   );
 };
 

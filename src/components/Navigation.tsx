@@ -1,204 +1,126 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
-import { springs } from "@/lib/springs";
+import { NAV_SECTIONS, SECTIONS } from "@/lib/sections";
 
-const navItems = [
-  { label: "Summary", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Certifications", href: "#certifications" },
-  { label: "Contact", href: "#contact" },
-];
-
+/**
+ * Wordmark left, section shortcuts in the middle, résumé and theme right (N1b).
+ * Under 64rem the shortcuts move into a sheet. Scroll state and the current section both come
+ * from IntersectionObserver, never a scroll listener.
+ */
 const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
-  const { theme, setTheme } = useTheme();
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [current, setCurrent] = useState<string | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const pickedInSheet = useRef(false);
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !("IntersectionObserver" in window)) return;
 
-    const sectionIds = navItems.map(item => item.href.substring(1));
-    const observers: IntersectionObserver[] = [];
+    const topObserver = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting));
+    topObserver.observe(sentinel);
 
-    sectionIds.forEach((id) => {
+    const options = { rootMargin: "-45% 0px -50% 0px", threshold: 0 };
+    const observers = [...SECTIONS.map((s) => s.id), "top"].flatMap((id) => {
       const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveSection(id);
-        },
-        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
-      );
+      if (!el) return [];
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) setCurrent(id === "top" ? null : id);
+      }, options);
       obs.observe(el);
-      observers.push(obs);
+      return [obs];
     });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      observers.forEach(o => o.disconnect());
+      topObserver.disconnect();
+      observers.forEach((o) => o.disconnect());
     };
   }, []);
 
+  const isDark = resolvedTheme === "dark";
+
+  const links = (className: string) =>
+    NAV_SECTIONS.map(({ id, label }) => (
+      <a key={id} href={`#${id}`} className={className} aria-current={current === id ? "true" : undefined}>
+        {label}
+      </a>
+    ));
+
   return (
     <>
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ ...springs.gentle, delay: 0.1 }}
-        style={{
-          paddingTop: "env(safe-area-inset-top)",
-          paddingLeft: "env(safe-area-inset-left)",
-          paddingRight: "env(safe-area-inset-right)",
-        }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow] duration-700 ease-out ${
-          isScrolled
-            ? "bg-background/95 border-b border-border/30 shadow-lg"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <a href="#" className="text-xl font-bold group">
-              Eric <span className="gradient-text">Lee</span>
+      <div ref={sentinelRef} aria-hidden="true" className="absolute left-0 top-0 h-px w-px" />
+
+      <header className="nav" data-scrolled={scrolled}>
+        <div className="page nav-inner">
+          <a href="#top" className="quiet-link inline-flex items-center gap-3">
+            <span className="seal" aria-hidden="true">
+              EL
+            </span>
+            <span className="font-display text-lg leading-none">Eric Lee</span>
+          </a>
+
+          <nav aria-label="Sections" className="nav-links hidden lg:flex">
+            {links("nav-link")}
+          </nav>
+
+          <div className="nav-actions">
+            <a href="/assets/Eric_Lee_Resume.pdf" target="_blank" rel="noopener noreferrer" className="nav-link">
+              Résumé<span className="sr-only"> (PDF, opens in a new tab)</span>
             </a>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  aria-current={activeSection === item.href.substring(1) ? "true" : undefined}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-full group ${
-                    activeSection === item.href.substring(1)
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {item.label}
-                  {activeSection === item.href.substring(1) && (
-                    <motion.span
-                      layoutId="activeNav"
-                      className="absolute inset-0 bg-primary/10 rounded-full -z-10"
-                      transition={springs.snappy}
-                    />
-                  )}
-                  <span className="absolute bottom-1 left-4 right-4 h-px bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </a>
-              ))}
-              <a
-                href="/assets/Eric_Lee_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300 rounded-full"
+            {mounted && (
+              <button
+                type="button"
+                onClick={() => setTheme(isDark ? "light" : "dark")}
+                className="icon-button"
+                aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
               >
-                Resume
-              </a>
-              {mounted && (
-                <motion.button
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className="p-2.5 rounded-full text-muted-foreground hover:text-foreground transition-colors ml-1"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-                >
-                  {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                </motion.button>
-              )}
-            </div>
+                {isDark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
+              </button>
+            )}
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-3 rounded-full glass-card text-muted-foreground hover:text-foreground transition-colors"
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isMobileMenuOpen}
-              aria-controls="mobile-menu"
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </motion.button>
+            <Dialog.Root open={sheetOpen} onOpenChange={setSheetOpen}>
+              <Dialog.Trigger className="nav-link lg:hidden">Sections</Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Overlay className="sheet-overlay" />
+                <Dialog.Content
+                  className="sheet"
+                  aria-describedby={undefined}
+                  // After a pick, focus belongs to the section the link named, not the trigger.
+                  onCloseAutoFocus={(event) => {
+                    if (!pickedInSheet.current) return;
+                    pickedInSheet.current = false;
+                    event.preventDefault();
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <Dialog.Title className="label">Sections</Dialog.Title>
+                    <Dialog.Close className="icon-button" aria-label="Close">
+                      <X className="h-4 w-4" aria-hidden="true" />
+                    </Dialog.Close>
+                  </div>
+                  <nav
+                    aria-label="Sections"
+                    className="mt-2 grid"
+                    onClick={() => {
+                      pickedInSheet.current = true;
+                      setSheetOpen(false);
+                    }}
+                  >
+                    {links("sheet-link")}
+                  </nav>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
           </div>
         </div>
-      </motion.nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-background/90 z-40 md:hidden"
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
-            <motion.div
-              id="mobile-menu"
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className="fixed inset-x-4 top-20 z-50 glass-card rounded-2xl border border-border/50 md:hidden overflow-y-auto overscroll-contain max-h-[calc(100dvh-6rem)]"
-            >
-              <div className="p-4 space-y-1">
-                {navItems.map((item, index) => (
-                  <motion.a
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className={`block px-4 py-3.5 rounded-xl text-base font-medium transition-colors duration-300 ${
-                      activeSection === item.href.substring(1)
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                    }`}
-                  >
-                    {item.label}
-                  </motion.a>
-                ))}
-                <motion.a
-                  href="/assets/Eric_Lee_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: navItems.length * 0.05 }}
-                  className="block px-4 py-3.5 rounded-xl text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors duration-300"
-                >
-                  Resume
-                </motion.a>
-                {mounted && (
-                  <motion.button
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: (navItems.length + 1) * 0.05 }}
-                    className="flex items-center gap-3 w-full px-4 py-3.5 rounded-xl text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors duration-300"
-                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-                  >
-                    {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                    {theme === "dark" ? "Light Mode" : "Dark Mode"}
-                  </motion.button>
-                )}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      </header>
     </>
   );
 };

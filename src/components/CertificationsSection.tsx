@@ -1,179 +1,48 @@
-import { motion } from "framer-motion";
-import { Award, Calendar, Sparkles, BadgeCheck } from "lucide-react";
-import { springs } from "@/lib/springs";
-import { useGSAPTextReveal } from "@/hooks/useGSAPTextReveal";
+import SectionHead from "@/components/SectionHead";
+import { useReveal } from "@/hooks/useReveal";
 
 const certifications = [
-  {
-    title: "Data Analytics",
-    issuer: "BrainStation",
-    location: "Toronto, ON",
-    period: "Nov 2023 – Jan 2024",
-    status: "Completed",
-    gradient: "from-blue-500 to-cyan-500",
-  },
-  {
-    title: "SQL for Healthcare Professionals",
-    issuer: "LinkedIn Learning",
-    period: "October 2024",
-    status: "Completed",
-    gradient: "from-sky-500 to-blue-500",
-  },
-  {
-    title: "Manage GA4 Data and Learn to Read Reports",
-    issuer: "Google Analytics",
-    period: "February 2026",
-    status: "Completed",
-    gradient: "from-amber-500 to-orange-500",
-  },
-  {
-    title: "CompTIA A+ Core 1 and Core 2 CertMaster Learn",
-    issuer: "CompTIA",
-    period: "September 2025 – Present",
-    status: "In Progress",
-    gradient: "from-red-500 to-rose-500",
-  },
-  {
-    title: "QBO ProAdvisor Certification",
-    issuer: "Intuit",
-    period: "March 2026 – October 2027",
-    status: "Completed",
-    gradient: "from-emerald-500 to-green-500",
-  },
-  {
-    title: "Salesforce CRM Trailblazer Badge",
-    issuer: "Salesforce",
-    period: "March 2026",
-    status: "Completed",
-    gradient: "from-indigo-500 to-blue-500",
-  },
-  {
-    title: "Process Mapping for Business Analyst",
-    issuer: "Salesforce Trailhead",
-    period: "March 2026",
-    status: "Completed",
-    gradient: "from-violet-500 to-purple-500",
-  },
-  {
-    title: "Essential Business Analyst Skills",
-    issuer: "Salesforce Trailhead",
-    period: "March 2026",
-    status: "Completed",
-    gradient: "from-purple-500 to-pink-500",
-  },
-  {
-    title: "Start Writing Prompts Like a Pro",
-    issuer: "Google",
-    period: "May 2026",
-    status: "Completed",
-    gradient: "from-fuchsia-500 to-violet-500",
-  },
+  { title: "Data Analytics", issuer: "BrainStation", period: "Nov 2023 to Jan 2024", status: "Completed" },
+  { title: "SQL for Healthcare Professionals", issuer: "LinkedIn Learning", period: "Oct 2024", status: "Completed" },
+  { title: "Manage GA4 Data and Learn to Read Reports", issuer: "Google Analytics", period: "Feb 2026", status: "Completed" },
+  { title: "CompTIA A+ Core 1 and Core 2 CertMaster Learn", issuer: "CompTIA", period: "Sep 2025 to present", status: "In progress" },
+  { title: "QBO ProAdvisor Certification", issuer: "Intuit", period: "Mar 2026 to Oct 2027", status: "Completed" },
+  { title: "Salesforce CRM Trailblazer Badge", issuer: "Salesforce", period: "Mar 2026", status: "Completed" },
+  { title: "Process Mapping for Business Analyst Trailblazer Badge", issuer: "Salesforce", period: "Mar 2026", status: "Completed" },
+  { title: "Essential Business Analyst Skills Trailblazer Badge", issuer: "Salesforce", period: "Mar 2026", status: "Completed" },
+  { title: "Start Writing Prompts Like a Pro", issuer: "Google", period: "May 2026", status: "Completed" },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.06,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: springs.standard,
-  },
-};
-
+/* A real table for real tabular data: credential, issuer, date, status. */
 const CertificationsSection = () => {
-  const textRef = useGSAPTextReveal();
+  const ref = useReveal<HTMLDivElement>();
+
   return (
-    <section id="certifications" className="relative py-20 sm:py-32 overflow-hidden">
-      {/* Background effect */}
-      <div
-        aria-hidden="true"
-        className="absolute left-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-20"
-        style={{
-          background: 'radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-        }}
-      />
+    <section id="certifications" className="section">
+      <div ref={ref} className="page">
+        <SectionHead title="Certifications" />
 
-      <div ref={textRef} className="section-container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={springs.standard}
-          className="mb-16"
-        >
-          <h2 className="section-label mb-4">Certifications</h2>
-          <h3 className="section-title gsap-reveal">Professional Development</h3>
-        </motion.div>
-
-        <motion.div
-          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          {certifications.map((cert) => (
-            <motion.div
-              key={cert.title}
-              variants={cardVariants}
-              className="glass-card rounded-2xl sm:rounded-3xl overflow-hidden group"
-              whileHover={{ y: -4, transition: springs.standard }}
-            >
-              {/* Colored top accent bar */}
-              <div className={`h-1 bg-gradient-to-r ${cert.gradient}`} />
-
-              <div className="p-6 sm:p-8">
-                {/* Header row: icon + status */}
-                <div className="flex items-start justify-between mb-5">
-                  <motion.div
-                    className={`p-3 sm:p-3.5 rounded-xl bg-gradient-to-br ${cert.gradient} text-white shadow-lg`}
-                    whileHover={{ scale: 1.08, rotate: 6 }}
-                    transition={springs.bouncy}
-                  >
-                    <Award className="w-5 h-5 sm:w-6 sm:h-6" />
-                  </motion.div>
-                  <span className={`inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-medium ${
-                    cert.status === "Completed"
-                      ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                      : "bg-amber-500/15 text-amber-400 border border-amber-500/30"
-                  }`}>
-                    {cert.status === "In Progress"
-                      ? <Sparkles className="w-3 h-3" />
-                      : <BadgeCheck className="w-3 h-3" />
-                    }
-                    {cert.status}
-                  </span>
-                </div>
-
-                {/* Title + Issuer */}
-                <h4 className="font-bold text-lg sm:text-xl mb-2 leading-tight">{cert.title}</h4>
-                {cert.issuer && (
-                  <p className="text-primary font-semibold text-sm sm:text-base mb-1">{cert.issuer}</p>
-                )}
-                {cert.location && (
-                  <p className="text-sm text-muted-foreground mb-1">{cert.location}</p>
-                )}
-
-                {/* Period */}
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground mt-4 pt-4 border-t border-border/40">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>{cert.period}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+        <table className="ledger ledger--stack reveal" style={{ "--i": 2 } as React.CSSProperties}>
+          <caption className="sr-only">Professional certifications with issuer, date and status</caption>
+          <thead>
+            <tr>
+              <th scope="col" className="w-[44%]">Credential</th>
+              <th scope="col">Issuer</th>
+              <th scope="col" className="whitespace-nowrap">Date</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {certifications.map(({ title, issuer, period, status }) => (
+              <tr key={title}>
+                <td data-label="Credential" className="font-medium">{title}</td>
+                <td data-label="Issuer">{issuer}</td>
+                <td data-label="Date" className="num whitespace-nowrap">{period}</td>
+                <td data-label="Status" className={status === "Completed" ? undefined : "muted"}>{status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
   );

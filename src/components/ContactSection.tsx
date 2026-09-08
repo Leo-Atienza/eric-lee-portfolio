@@ -1,159 +1,45 @@
-import { motion } from "framer-motion";
-import { Mail, Linkedin, MapPin, ArrowRight, Phone, Send } from "lucide-react";
-import { springs } from "@/lib/springs";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: springs.standard,
-  },
-};
+import SectionHead from "@/components/SectionHead";
+import { useReveal } from "@/hooks/useReveal";
 
 const ContactSection = () => {
-  const contactLinks = [
-    {
-      href: "mailto:ericyeefalee@gmail.com",
-      icon: Mail,
-      label: "Email",
-      value: "ericyeefalee@gmail.com",
-      isLink: true,
-    },
-    {
-      href: "tel:+16472178158",
-      icon: Phone,
-      label: "Phone",
-      value: "(647) 217-8158",
-      isLink: true,
-    },
-    {
-      href: "https://www.linkedin.com/in/eric-yf-lee/",
-      icon: Linkedin,
-      label: "LinkedIn",
-      value: "linkedin.com/in/eric-yf-lee",
-      isLink: true,
-      external: true,
-    },
-    {
-      icon: MapPin,
-      label: "Location",
-      value: "Markham, ON, Canada",
-      isLink: false,
-    },
-  ];
+  const ref = useReveal<HTMLDivElement>();
 
   return (
-    <section id="contact" className="relative py-20 sm:py-32 overflow-hidden">
-      {/* Background CTA gradient */}
-      <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(ellipse at center bottom, hsl(var(--primary) / 0.1), transparent 60%)'
-        }}
-      />
+    <section id="contact" className="section">
+      <div ref={ref} className="page">
+        <SectionHead title="Contact" lede="Seeking full-time roles in analytics or consulting." />
 
-      <div className="section-container relative z-10">
-        {/* Bold CTA header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={springs.standard}
-          className="text-center mb-12 sm:mb-16"
-        >
-          <h2 className="section-label mb-4">Contact</h2>
-          <h3 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6">
-            Let's <span className="gradient-text">Connect</span>
-          </h3>
-          <p className="text-muted-foreground max-w-xl mx-auto text-base sm:text-lg mb-8 sm:mb-10">
-            I'm currently seeking full-time roles in analytics or consulting.
-            Feel free to reach out for opportunities or collaborations.
-          </p>
-
-          {/* Primary CTA button */}
-          <motion.a
+        <p className="reveal" style={{ "--i": 2 } as React.CSSProperties}>
+          <a
             href="mailto:ericyeefalee@gmail.com"
-            className="btn-premium inline-flex text-base sm:text-lg px-8 sm:px-10 py-4 sm:py-5"
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.96, transition: springs.snappy }}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, ...springs.standard }}
+            className="link font-display text-[clamp(1.5rem,1rem+2.4vw,3rem)] leading-tight break-all sm:break-normal"
           >
-            <Send className="w-5 h-5" />
-            Send me a message
-          </motion.a>
-        </motion.div>
+            ericyeefalee@gmail.com
+          </a>
+        </p>
 
-        {/* Contact details grid */}
-        <motion.div
-          className="grid sm:grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-        >
-          {contactLinks.map((item) => {
-            const content = (
-              <motion.div
-                variants={cardVariants}
-                className="contact-card group"
-                whileHover={{ x: 4, transition: springs.snappy }}
-              >
-                <motion.div
-                  className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/15 to-accent/10 text-primary group-hover:from-primary group-hover:to-primary group-hover:text-primary-foreground transition-all duration-500"
-                  whileHover={{ scale: 1.05 }}
-                  transition={springs.bouncy}
-                >
-                  <item.icon className="w-5 h-5" />
-                </motion.div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-muted-foreground font-medium">{item.label}</p>
-                  <p className="font-semibold text-sm sm:text-base truncate">{item.value}</p>
-                </div>
-                {item.isLink && (
-                  <motion.div
-                    className="flex-shrink-0"
-                    whileHover={{ x: 4 }}
-                    transition={springs.snappy}
-                  >
-                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-                  </motion.div>
-                )}
-              </motion.div>
-            );
-
-            if (item.isLink) {
-              return (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target={item.external ? "_blank" : undefined}
-                  rel={item.external ? "noopener noreferrer" : undefined}
-                >
-                  {content}
-                </a>
-              );
-            }
-
-            return <div key={item.label}>{content}</div>;
-          })}
-        </motion.div>
+        <dl className="kv kv--stack reveal max-w-measure mt-10" style={{ "--i": 3 } as React.CSSProperties}>
+          <dt>Phone</dt>
+          <dd className="num">
+            <a href="tel:+16472178158" className="quiet-link">
+              (647) 217-8158
+            </a>
+          </dd>
+          <dt>LinkedIn</dt>
+          <dd>
+            <a href="https://www.linkedin.com/in/eric-yf-lee/" target="_blank" rel="noopener noreferrer" className="link">
+              linkedin.com/in/eric-yf-lee<span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </dd>
+          <dt>Résumé</dt>
+          <dd>
+            <a href="/assets/Eric_Lee_Resume.pdf" target="_blank" rel="noopener noreferrer" className="link">
+              Eric_Lee_Resume.pdf<span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </dd>
+          <dt>Location</dt>
+          <dd>Markham, Ontario, Canada</dd>
+        </dl>
       </div>
     </section>
   );

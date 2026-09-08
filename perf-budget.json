@@ -1,0 +1,12 @@
+{
+  "_how": "Budget for the public build. Run: node ~/.claude/skills/impeccable/scripts/check-perf-budget.mjs --lh ./lh.json (craft step 4e). Field INP/LCP/CLS via --field <crux.json> or --inp <ms> after deploy.",
+  "_source": "CWV p75 thresholds per web.dev/articles/vitals (LCP ≤ 2.5 s · INP ≤ 200 ms · CLS ≤ 0.1); jsBytes matches .size-limit.json (200 KB gzip); tighten per project, never loosen past the CWV line.",
+  "lcp": 2500,
+  "inp": 200,
+  "cls": 0.1,
+  "lighthousePerf": 90,
+  "jsBytes": 200000,
+  "cssBytes": 60000,
+  "fonts": 2,
+  "requests": 50
+}
