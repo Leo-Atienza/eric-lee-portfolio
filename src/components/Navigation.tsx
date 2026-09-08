@@ -74,16 +74,18 @@ const Navigation = () => {
             <a href="/assets/Eric_Lee_Resume.pdf" target="_blank" rel="noopener noreferrer" className="nav-link">
               Résumé<span className="sr-only"> (PDF, opens in a new tab)</span>
             </a>
-            {mounted && (
-              <button
-                type="button"
-                onClick={() => setTheme(isDark ? "light" : "dark")}
-                className="icon-button"
-                aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-              >
-                {isDark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
-              </button>
-            )}
+            {/* Always in the prerendered HTML at full size, so nothing in the bar moves when the
+                bundle lands. The icons swap on html.dark (set before first paint); the name follows
+                once the resolved theme is known on the client. */}
+            <button
+              type="button"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className="icon-button"
+              aria-label={mounted ? (isDark ? "Switch to light theme" : "Switch to dark theme") : "Switch theme"}
+            >
+              <Sun className="hidden h-4 w-4 dark:block" aria-hidden="true" />
+              <Moon className="h-4 w-4 dark:hidden" aria-hidden="true" />
+            </button>
 
             <Dialog.Root open={sheetOpen} onOpenChange={setSheetOpen}>
               <Dialog.Trigger className="nav-link lg:hidden">Sections</Dialog.Trigger>

@@ -12,7 +12,6 @@ its gates sit at the top of `src/index.css`.
 - React
 - Tailwind CSS
 - Radix UI (dialog)
-- Lenis (smooth wheel scroll)
 
 ## Development
 
