@@ -24,7 +24,14 @@ is absent from the build on purpose.
 - **Motion:** M2; one transform-only hero rise (the LCP never sits at opacity 0), reveal-once on
   section entry, no parallax, cursor-follow, tilt or count-ups (Caslon's digits are proportional,
   so counting would jitter). Framer Motion and GSAP were removed: CSS transitions plus one
-  IntersectionObserver hook cover the whole dial.
+  IntersectionObserver hook cover the whole dial. The reveal fires the moment a section's top
+  edge enters (threshold 0): a ratio scaled the wait with the section's height, so tall sections
+  sat blank until a slice of them had scrolled in.
+- **Scrolling:** the browser's own. Lenis wheel smoothing was removed on 2026-09-08: its
+  main-thread loop made smoothness device-dependent and left a 0.9 s drift after the wheel
+  stopped (KNOWLEDGE-124), and this page has no scroll choreography that would need synced
+  position. Anchors glide through `scroll-behavior: smooth` (off under reduced motion) and land
+  under the fixed nav through `scroll-padding-top`.
 - **Theme:** system, light by default in effect (a printed report read in daylight); dark is the
   same ledger in ink and is contrast-checked separately.
 - **Prerender:** the home route is rendered to HTML at build time and hydrated, because an empty
@@ -35,7 +42,9 @@ is absent from the build on purpose.
   render-blocking request) and the bundle is appended on the `load` event, so the portrait and the
   two faces own the connection until the first screen is drawn. Anchors, the résumé link and every
   word work before hydration; the theme toggle, the Sections sheet and the lightbox activate a
-  moment later on slow links.
+  moment later on slow links. The reveal gate is armed by the bundle itself (`main.tsx`), never
+  from the head, because until the bundle runs nothing can un-hide a section: armed early, a
+  reader who scrolled ahead of it on slow 4G saw blank sections for two seconds.
 - **Portrait resolution:** the only source is the 305 px paste, cropped to 264 px. On 2x screens
   the browser upscales it; Lighthouse flags this under best practices. A 600 px original from Eric
   fixes it with no code change (re-run `scripts/build-og-image.mjs` after replacing the files).

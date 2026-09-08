@@ -142,16 +142,11 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  /* Lenis smooth wheel scroll */
-  html.lenis,
-  html.lenis body {
-    height: auto;
-  }
-  .lenis.lenis-smooth {
-    scroll-behavior: auto;
-  }
-  .lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain;
+  /* Native compositor scroll; anchors glide unless the reader asked for less motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -598,20 +593,23 @@
   }
 
   /* ── Reveal, once, on entry, staggered by --i; the group carries the class.
-   * Gated on html.js (set inline in index.html) so a reader without JavaScript, or one who
-   * scrolls before hydration, still gets the whole document. ── */
+   * The gate (html.js) is armed by main.tsx once the bundle runs, never from the head: a reader
+   * who scrolls before hydration, or without JavaScript, gets the whole document. The transition
+   * sits on the visible state, so arming the gate snaps what is below the fold instead of fading
+   * it out. ── */
   .js .reveal {
     opacity: 0;
     transform: translateY(12px);
-    transition:
-      opacity var(--dur-reveal) var(--ease-out-quint),
-      transform var(--dur-reveal) var(--ease-out-quint);
-    transition-delay: calc(var(--i, 0) * 70ms);
   }
   .js .is-visible .reveal,
   .js .reveal.is-visible {
     opacity: 1;
     transform: none;
+    transition:
+      opacity var(--dur-reveal) var(--ease-out-quint),
+      transform var(--dur-reveal) var(--ease-out-quint);
+    /* 50ms a row: the seventh row of a schedule waits 350ms, not the 490ms that read as loading */
+    transition-delay: calc(var(--i, 0) * 50ms);
   }
 
   /* ── Hero entrance, anything that can be the LCP at any viewport (the name on desktop,
